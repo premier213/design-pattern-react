@@ -1,0 +1,2146 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>design pattern</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="56ec73f4-0961-48cc-bdf6-7b3a5291a598" class="page sans"><header><img class="page-cover-image" src="https://images.unsplash.com/photo-1541471943749-e5976783f6c3?ixlib=rb-4.0.3&amp;q=85&amp;fm=jpg&amp;crop=entropy&amp;cs=srgb" style="object-position:center 50%"/><h1 class="page-title">design pattern</h1><p class="page-description"></p></header><div class="page-body"><p id="0967dab1-257f-4a9b-a505-ea0f39f2669f" class="">
+</p><p id="19c5298e-e86e-4945-b840-bde26bb9909e" class="">
+</p><ul id="8bae53a3-aa30-4450-92f1-d0bc4d1909be" class="toggle"><li><details open=""><summary><strong>Creational Patterns</strong> (Focus on object creation)</summary><ul id="1b49f5bf-5ce3-4d46-b907-92800c617fd2" class="bulleted-list"><li style="list-style-type:disc">Singleton</li></ul><ul id="f294c96f-30d2-4a35-b462-2dd98ab35355" class="bulleted-list"><li style="list-style-type:disc">Factory Method</li></ul><ul id="4099756c-3d07-4934-abde-0f92f06426d9" class="bulleted-list"><li style="list-style-type:disc">Abstract Factory</li></ul><ul id="59e33c8a-43b3-4b83-af14-a85b74469035" class="bulleted-list"><li style="list-style-type:disc">Builder</li></ul><ul id="99a37435-d5fe-4ce2-ae3f-ccfdb76a2d07" class="bulleted-list"><li style="list-style-type:disc">Prototype</li></ul></details></li></ul><ul id="c6a6e59c-2713-4bba-b7d7-7eee33d91e3f" class="toggle"><li><details open=""><summary><strong>Structural Patterns</strong> (Focus on the composition of classes or objects)</summary><ul id="e56d89e9-c275-4946-a769-81b11c8df18e" class="bulleted-list"><li style="list-style-type:disc">Adapter</li></ul><ul id="09ad2114-c9e2-42c2-b554-d6629e3e4c92" class="bulleted-list"><li style="list-style-type:disc">Bridge</li></ul><ul id="06419d7f-5006-4fc8-ae35-90849b464506" class="bulleted-list"><li style="list-style-type:disc">Composite</li></ul><ul id="f3dc0ace-4a1d-4a61-8072-c789c23a8591" class="bulleted-list"><li style="list-style-type:disc">Decorator</li></ul><ul id="f0d12be2-ed61-4045-90f5-c9d29ba7c167" class="bulleted-list"><li style="list-style-type:disc">Facade</li></ul><ul id="1130721b-0baf-4c9b-91b0-1178bbbc719b" class="bulleted-list"><li style="list-style-type:disc">Flyweight</li></ul><ul id="4c15618a-531f-4451-88f8-5ea1768b19a7" class="bulleted-list"><li style="list-style-type:disc">Proxy</li></ul></details></li></ul><ul id="83a6fdad-6f1e-41ab-84ae-a62753e48f17" class="toggle"><li><details open=""><summary><strong>Behavioral Patterns</strong> (Focus on communication between objects)</summary><ul id="302aed9d-f755-4b23-aaf1-b8bde314f318" class="bulleted-list"><li style="list-style-type:disc">Chain of Responsibility</li></ul><ul id="1168f082-63ab-4c6f-9f44-046b6e76be03" class="bulleted-list"><li style="list-style-type:disc">Command</li></ul><ul id="fbcf59e2-2149-41fe-8bf2-6cbc85ea0642" class="bulleted-list"><li style="list-style-type:disc">Interpreter</li></ul><ul id="ca4e8409-0b13-4929-98ff-baaed9994ec6" class="bulleted-list"><li style="list-style-type:disc">Iterator</li></ul><ul id="eecd3be7-7278-4b95-9126-095986a8787d" class="bulleted-list"><li style="list-style-type:disc">Mediator</li></ul><ul id="697e5e16-d92b-413f-a3fa-740d55363994" class="bulleted-list"><li style="list-style-type:disc">Memento</li></ul><ul id="91d77281-4e73-4ae4-a574-a8ac0347ed64" class="bulleted-list"><li style="list-style-type:disc">Observer</li></ul><ul id="61d75134-1e4f-430a-a372-27f761b15021" class="bulleted-list"><li style="list-style-type:disc">State</li></ul><ul id="8d464ffb-9d25-4959-aec9-f79be51a0f22" class="bulleted-list"><li style="list-style-type:disc">Strategy</li></ul><ul id="8591531b-c7d0-46bf-bebb-facf5eff1dee" class="bulleted-list"><li style="list-style-type:disc">Template Method</li></ul><ul id="6d87cda7-e83b-4733-9ea5-1a76cfb8aa78" class="bulleted-list"><li style="list-style-type:disc">Visitor</li></ul></details></li></ul><ul id="8eef06ac-e424-4a05-8859-074e207b8958" class="toggle"><li><details open=""><summary><strong>Concurrency Patterns</strong> (Focus on managing multiple threads or processes)</summary><ul id="e8744535-1261-48ef-b896-f236cca0ff15" class="bulleted-list"><li style="list-style-type:disc">Thread Pool</li></ul><ul id="67dcf28f-9a57-4f68-bd69-5f818fc7572b" class="bulleted-list"><li style="list-style-type:disc">Lock</li></ul><ul id="12582755-8b14-4974-a009-987b9c82e96e" class="bulleted-list"><li style="list-style-type:disc">Semaphore</li></ul><ul id="f3fb6bb5-e1d6-4ccc-8117-f582d2e52ae8" class="bulleted-list"><li style="list-style-type:disc">Barrier</li></ul><ul id="0bac4c05-a5ce-40d2-868a-7c3417356467" class="bulleted-list"><li style="list-style-type:disc">Monitor</li></ul></details></li></ul><hr id="77f6d61a-8859-4034-a9f7-444a3ad3597e"/><h1 id="a9a02108-a592-4659-925c-b2f0c94b974a" class="">Singleton Pattern</h1><blockquote id="da11321b-cfe4-4886-9d4c-dc460d2b6920" class="">Creational Patterns</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="91218ae8-79a4-48f1-b5b8-1414c9e7b32c" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const Singleton = (() =&gt; {
+  let instance;
+
+  const createInstance = () =&gt; {
+    const object = new Object(&quot;I am the singleton instance&quot;);
+    return object;
+  };
+
+  return {
+    getInstance: () =&gt; {
+      if (!instance) {
+        instance = createInstance();
+      }
+      return instance;
+    }
+  };
+})();
+
+const getSingletonInstance = () =&gt; {
+  return Singleton.getInstance();
+};
+
+const App = () =&gt; {
+  const instance = getSingletonInstance();
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Singleton Pattern Example&lt;/h1&gt;
+      &lt;p&gt;{instance.toString()}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="73a471bd-936b-4d6f-a868-20a0d5ad397c" class="">Pros</h2><ul id="2c82861e-c1bf-4c84-b9e7-0ac0190d71c7" class="bulleted-list"><li style="list-style-type:disc"><strong>Global Access:</strong> Provides a single point of access to a shared resource across the application.</li></ul><ul id="e932ccaa-af51-423d-8855-14d7b6aac868" class="bulleted-list"><li style="list-style-type:disc"><strong>Lazy Initialization:</strong> The instance is created only when it&#x27;s first requested, saving resources.</li></ul><ul id="99d03df4-b2d7-44d7-85ad-54c5db4a41cd" class="bulleted-list"><li style="list-style-type:disc"><strong>Thread Safety:</strong> When implemented correctly, ensures only one instance exists even in multi-threaded environments.</li></ul><ul id="28339d20-a6d5-446a-8ab7-7e5137f90b44" class="bulleted-list"><li style="list-style-type:disc"><strong>Consistency:</strong> Guarantees that all objects use the same instance throughout the application.</li></ul><h2 id="b24ab42a-f65c-4550-8776-096518ce1a00" class="">Cons</h2><ul id="1c7cb37e-9701-40f9-9fa3-4c79b79b23b8" class="bulleted-list"><li style="list-style-type:disc"><strong>Global State:</strong> Can make the application&#x27;s behavior less predictable and harder to debug.</li></ul><ul id="33254258-fa16-4da8-a4c5-7fc895d0c1ff" class="bulleted-list"><li style="list-style-type:disc"><strong>Tight Coupling:</strong> Classes that depend on the Singleton become tightly coupled to it.</li></ul><ul id="50a12c6d-d7f9-4b44-8a66-d68735891b5f" class="bulleted-list"><li style="list-style-type:disc"><strong>Testability:</strong> Can make unit testing more difficult due to its global state.</li></ul><ul id="3bff546e-da57-41bd-8731-19af37d1b449" class="bulleted-list"><li style="list-style-type:disc"><strong>Violation of Single Responsibility Principle:</strong> The Singleton class takes on the responsibility of managing its own lifecycle.</li></ul><p id="3fd48ab1-dc71-4a46-bee7-8c59c708841b" class="">
+</p><h1 id="fef6617d-ac65-4bac-8764-243958c181b4" class="">Factory Pattern</h1><blockquote id="702dbd4e-0a16-4371-854c-be9fc4620a7c" class=""> Creational Patterns</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5dc6b685-61a3-49e3-b88f-db21ff029bf7" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const componentFactory = (type) =&gt; {
+  switch (type) {
+    case &#x27;Button&#x27;:
+      return &lt;Button /&gt;;
+    case &#x27;Input&#x27;:
+      return &lt;Input /&gt;;
+    case &#x27;Checkbox&#x27;:
+      return &lt;Checkbox /&gt;;
+    default:
+      return null;
+  }
+};
+
+const Button = () =&gt; {
+  return &lt;button&gt;Click Me&lt;/button&gt;;
+};
+
+const Input = () =&gt; {
+  return &lt;input type=&quot;text&quot; placeholder=&quot;Enter text&quot; /&gt;;
+};
+
+const Checkbox = () =&gt; {
+  return &lt;input type=&quot;checkbox&quot; /&gt;;
+};
+
+const App = () =&gt; {
+  const [componentType, setComponentType] = React.useState(&#x27;Button&#x27;);
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Factory Pattern Example&lt;/h1&gt;
+      &lt;select onChange={(e) =&gt; setComponentType(e.target.value)} value={componentType}&gt;
+        &lt;option value=&quot;Button&quot;&gt;Button&lt;/option&gt;
+        &lt;option value=&quot;Input&quot;&gt;Input&lt;/option&gt;
+        &lt;option value=&quot;Checkbox&quot;&gt;Checkbox&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;div&gt;
+        {componentFactory(componentType)}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="223aac30-a796-4465-ad82-579f69adebf2" class="">Pros</h2><ul id="986c6bf5-bd25-4879-908e-c62237cd0993" class="bulleted-list"><li style="list-style-type:disc"><strong>Abstraction:</strong> Encapsulates object creation logic, allowing the client code to focus on using the object rather than creating it.</li></ul><ul id="866cd6a1-4b26-46ed-ab8e-8f2eb76cd808" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Makes it easy to introduce new types of components without changing existing code.</li></ul><ul id="e8ed123e-8a45-451a-9b4f-3f1b162a44d8" class="bulleted-list"><li style="list-style-type:disc"><strong>Centralized Control:</strong> Provides a centralized point for object creation, making it easier to manage and modify the creation process.</li></ul><ul id="172d9821-dd78-4ec0-8fe1-6a38a7e00f16" class="bulleted-list"><li style="list-style-type:disc"><strong>Loose Coupling:</strong> Reduces dependencies between the client code and the concrete classes being instantiated.</li></ul><h2 id="3727ab8d-2556-4549-8ac4-adfc118a4ce9" class="">Cons</h2><ul id="7e4e4fe5-fe19-4931-90f2-07c58c628edb" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> Can introduce unnecessary complexity for simple object creation scenarios.</li></ul><ul id="8fa61f67-b7ce-4432-9caf-ef966d29a6c5" class="bulleted-list"><li style="list-style-type:disc"><strong>Increased Number of Classes:</strong> May lead to a proliferation of factory classes, especially if there are many different types of objects.</li></ul><ul id="eaf28b77-ebd8-47fd-9d97-5e7df44f57f7" class="bulleted-list"><li style="list-style-type:disc"><strong>Harder to Subclass:</strong> If the factory method is in a base class, all subclasses must override it, which can be cumbersome.</li></ul><ul id="10e0b7b2-2783-4587-a84a-1e5a9f1c143c" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance Overhead:</strong> In some cases, using a factory method might introduce a slight performance overhead compared to direct object instantiation.</li></ul><h1 id="d3af16a0-e35e-4aef-9123-4cd03a8effb9" class="">Abstract Factory</h1><blockquote id="fc4bf86b-80ec-4e53-88eb-cb08c10c0eb2" class=""> Creational Patterns</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9a090275-c671-4c52-ab45-bc51a56ea747" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const createUIFactory = (type) =&gt; {
+  switch (type) {
+    case &#x27;MaterialUI&#x27;:
+      return materialUIFactory;
+    case &#x27;BootstrapUI&#x27;:
+      return bootstrapUIFactory;
+    default:
+      throw new Error(&#x27;Unknown UI type&#x27;);
+  }
+};
+
+const materialUIFactory = {
+  createButton: () =&gt; &lt;MaterialButton /&gt;,
+  createInput: () =&gt; &lt;MaterialInput /&gt;,
+};
+
+const bootstrapUIFactory = {
+  createButton: () =&gt; &lt;BootstrapButton /&gt;,
+  createInput: () =&gt; &lt;BootstrapInput /&gt;,
+};
+
+const MaterialButton = () =&gt; {
+  return &lt;button style={{ backgroundColor: &#x27;blue&#x27;, color: &#x27;white&#x27; }}&gt;Material Button&lt;/button&gt;;
+};
+
+const MaterialInput = () =&gt; {
+  return &lt;input type=&quot;text&quot; placeholder=&quot;Material Input&quot; style={{ borderColor: &#x27;blue&#x27; }} /&gt;;
+};
+
+const BootstrapButton = () =&gt; {
+  return &lt;button className=&quot;btn btn-primary&quot;&gt;Bootstrap Button&lt;/button&gt;;
+};
+
+const BootstrapInput = () =&gt; {
+  return &lt;input type=&quot;text&quot; className=&quot;form-control&quot; placeholder=&quot;Bootstrap Input&quot; /&gt;;
+};
+
+const App = () =&gt; {
+  const [uiType, setUIType] = React.useState(&#x27;MaterialUI&#x27;);
+  const uiFactory = createUIFactory(uiType);
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Abstract Factory Pattern Example&lt;/h1&gt;
+      &lt;select onChange={(e) =&gt; setUIType(e.target.value)} value={uiType}&gt;
+        &lt;option value=&quot;MaterialUI&quot;&gt;Material UI&lt;/option&gt;
+        &lt;option value=&quot;BootstrapUI&quot;&gt;Bootstrap UI&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;div&gt;
+        {uiFactory.createButton()}
+        {uiFactory.createInput()}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="6b4cbdab-df9e-4ea3-971f-66c9d821ea03" class="">Pros</h2><ul id="7abf2366-5eeb-4901-9928-5c32686ad92f" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Allows creating families of related objects without specifying their concrete classes.</li></ul><ul id="dc8a2f22-e4ea-4b54-8883-31b6f68d0aea" class="bulleted-list"><li style="list-style-type:disc"><strong>Consistency:</strong> Ensures that products from the same family are used together.</li></ul><ul id="94383175-1e6f-4e02-bfc6-b8c5c740d69e" class="bulleted-list"><li style="list-style-type:disc"><strong>Separation of Concerns:</strong> Isolates the client code from the details of product creation.</li></ul><ul id="070a5ebe-ffc9-47a6-ac95-60e41c59ae22" class="bulleted-list"><li style="list-style-type:disc"><strong>Easy Product Family Switch:</strong> Makes it simple to switch entire product families.</li></ul><h2 id="a09b153c-6282-4fc1-857d-9f14ffa75f7d" class="">Cons</h2><ul id="fcf68193-5958-4ae8-adc3-098a038d59a2" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> Can be overkill for simple scenarios, adding unnecessary abstraction.</li></ul><ul id="be92dce8-2fa7-4645-b9b8-20a777cecd75" class="bulleted-list"><li style="list-style-type:disc"><strong>Difficulty in Adding New Products:</strong> Introducing new types of products can require changes to the abstract factory interface and all its implementations.</li></ul><ul id="1220ad02-de08-46da-bfaf-dd762d179736" class="bulleted-list"><li style="list-style-type:disc"><strong>Increased Number of Classes:</strong> Results in more interfaces and classes, which can make the codebase harder to navigate.</li></ul><ul id="03ea3e79-4be5-42b7-b291-f4c31ae639cd" class="bulleted-list"><li style="list-style-type:disc"><strong>Rigid Structure:</strong> Once established, the structure can be difficult to modify without affecting multiple parts of the system.</li></ul><h1 id="2221ed78-da5c-41cf-8f04-6f3651ad9c9f" class="">Builder Pattern</h1><blockquote id="ff1ef4b5-c4a5-4121-bcdc-f4fb421c1e70" class="">Creational Patterns</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7e9efbc2-3dab-4eac-b6b9-614d8f46948c" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const createFormBuilder = () =&gt; {
+  const form = {
+    title: &#x27;&#x27;,
+    fields: [],
+    submitButton: null,
+  };
+
+  return {
+    setTitle: (title) =&gt; {
+      form.title = title;
+      return this;
+    },
+    addField: (field) =&gt; {
+      form.fields.push(field);
+      return this;
+    },
+    setSubmitButton: (button) =&gt; {
+      form.submitButton = button;
+      return this;
+    },
+    build: () =&gt; form,
+  };
+};
+
+const createTextField = (label, placeholder) =&gt; ({
+  type: &#x27;text&#x27;,
+  label,
+  placeholder,
+});
+
+const createSubmitButton = (label) =&gt; ({
+  type: &#x27;submit&#x27;,
+  label,
+});
+
+const Form = ({ form }) =&gt; (
+  &lt;form&gt;
+    &lt;h2&gt;{form.title}&lt;/h2&gt;
+    {form.fields.map((field, index) =&gt; (
+      &lt;div key={index}&gt;
+        &lt;label&gt;{field.label}&lt;/label&gt;
+        &lt;input type={field.type} placeholder={field.placeholder} /&gt;
+      &lt;/div&gt;
+    ))}
+    {form.submitButton &amp;&amp; (
+      &lt;button type={form.submitButton.type}&gt;{form.submitButton.label}&lt;/button&gt;
+    )}
+  &lt;/form&gt;
+);
+
+const App = () =&gt; {
+  const formBuilder = createFormBuilder()
+    .setTitle(&#x27;Contact Us&#x27;)
+    .addField(createTextField(&#x27;Name&#x27;, &#x27;Enter your name&#x27;))
+    .addField(createTextField(&#x27;Email&#x27;, &#x27;Enter your email&#x27;))
+    .setSubmitButton(createSubmitButton(&#x27;Submit&#x27;))
+    .build();
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Builder Pattern Example&lt;/h1&gt;
+      &lt;Form form={formBuilder} /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="11b9d0c7-877d-4aaf-81ea-ce7edc24096f" class="">Pros</h2><ul id="1772cc75-06a1-45ab-be6b-8b323fdcacd3" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Allows step-by-step construction of complex objects.</li></ul><ul id="9b1d0e14-1449-44cc-8ae6-14e539ebbd79" class="bulleted-list"><li style="list-style-type:disc"><strong>Separation of Concerns:</strong> Separates the construction of a complex object from its representation.</li></ul><ul id="8d3a2176-b1db-44ff-a315-5b25062b2d88" class="bulleted-list"><li style="list-style-type:disc"><strong>Control over Construction Process:</strong> Provides more control over the steps of construction.</li></ul><ul id="ba4aba84-ee50-409b-99d2-70877d82c00f" class="bulleted-list"><li style="list-style-type:disc"><strong>Reusability:</strong> Can reuse the same construction process to create different representations.</li></ul><h2 id="3c05ec85-426b-4a75-b6e3-1ea4a3a02146" class="">Cons</h2><ul id="a53db91f-a812-4d0e-a74a-d2b1babe45a3" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> Can lead to more complex code, especially for simpler objects.</li></ul><ul id="f7867760-c699-41ab-a2af-5b727f7c7bcc" class="bulleted-list"><li style="list-style-type:disc"><strong>Increased Number of Classes:</strong> Requires creating multiple new classes for each type of object.</li></ul><ul id="a4f7c4d1-b9f7-42a7-9687-21bbf6047383" class="bulleted-list"><li style="list-style-type:disc"><strong>Mutable Objects:</strong> The object being built is typically mutable during construction.</li></ul><ul id="cb835e4b-4f51-4d82-9238-4cbf2f8ea5a6" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance Overhead:</strong> May introduce slight performance overhead due to the additional abstraction layer.</li></ul><h1 id="d171efe5-2494-40b5-beaf-2cfe51bfe72a" class="">Prototype Pattern</h1><blockquote id="451a1107-8b64-44c1-9fdc-35ab9427ae5e" class="">Creational Patterns</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e6cfb3c1-1f7f-4ffa-82b2-d7113d1f1dcf" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const formPrototype = {
+  title: &#x27;&#x27;,
+  fields: [],
+  submitButton: null,
+  clone() {
+    return { ...this, fields: [...this.fields] };
+  },
+};
+
+const createForm = (title, fields, submitButton) =&gt; {
+  const form = formPrototype.clone();
+  form.title = title;
+  form.fields = fields;
+  form.submitButton = submitButton;
+  return form;
+};
+
+const Form = ({ form }) =&gt; (
+  &lt;form&gt;
+    &lt;h2&gt;{form.title}&lt;/h2&gt;
+    {form.fields.map((field, index) =&gt; (
+      &lt;div key={index}&gt;
+        &lt;label&gt;{field.label}&lt;/label&gt;
+        &lt;input type={field.type} placeholder={field.placeholder} /&gt;
+      &lt;/div&gt;
+    ))}
+    {form.submitButton &amp;&amp; (
+      &lt;button type={form.submitButton.type}&gt;{form.submitButton.label}&lt;/button&gt;
+    )}
+  &lt;/form&gt;
+);
+
+const App = () =&gt; {
+  const form1 = createForm(
+    &#x27;Contact Us&#x27;,
+    [
+      { type: &#x27;text&#x27;, label: &#x27;Name&#x27;, placeholder: &#x27;Enter your name&#x27; },
+      { type: &#x27;text&#x27;, label: &#x27;Email&#x27;, placeholder: &#x27;Enter your email&#x27; },
+    ],
+    { type: &#x27;submit&#x27;, label: &#x27;Submit&#x27; }
+  );
+
+  const form2 = createForm(
+    &#x27;Feedback&#x27;,
+    [
+      { type: &#x27;text&#x27;, label: &#x27;Comments&#x27;, placeholder: &#x27;Enter your comments&#x27; },
+    ],
+    { type: &#x27;submit&#x27;, label: &#x27;Send Feedback&#x27; }
+  );
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Prototype Pattern Example&lt;/h1&gt;
+      &lt;Form form={form1} /&gt;
+      &lt;Form form={form2} /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="53b52352-1def-4f2a-8646-f094cb21c9f6" class="">Pros</h2><ul id="1c7efcec-9722-4560-ac01-f5c5f2f8f870" class="bulleted-list"><li style="list-style-type:disc"><strong>Simplified Object Creation:</strong> Allows creating new objects by copying an existing instance, reducing the need for complex initialization code.</li></ul><ul id="2f40a3a9-850f-4068-a09f-d766ba35f53c" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Enables adding or removing products at runtime by cloning existing prototypes.</li></ul><ul id="201a5d53-9b48-4149-9983-836313d60669" class="bulleted-list"><li style="list-style-type:disc"><strong>Reduced Subclassing:</strong> Can be used as an alternative to inheritance for varying product configurations.</li></ul><ul id="928bef1c-ded9-4eba-bdba-fa6f854636fc" class="bulleted-list"><li style="list-style-type:disc"><strong>Dynamic Loading:</strong> Allows for adding classes to the system without modifying it.</li></ul><h2 id="218d41f5-af33-4e60-a3cb-a61158bd3bf6" class="">Cons</h2><ul id="f61910b4-4220-4287-b3b9-572de55d5ed9" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity with Circular References:</strong> Cloning objects with circular references might be challenging and lead to complex code.</li></ul><ul id="df8fa16d-bda4-491b-a1d1-8b9217edc0c0" class="bulleted-list"><li style="list-style-type:disc"><strong>Deep Copy vs Shallow Copy:</strong> Implementing a deep copy for complex objects can be tricky and potentially impact performance.</li></ul><ul id="345b41e3-ea3c-437a-b5f8-d91da1c05013" class="bulleted-list"><li style="list-style-type:disc"><strong>Overuse:</strong> Not every object needs to be cloneable, and overuse can lead to unnecessary complexity.</li></ul><ul id="9eeff474-3ba5-487a-9fad-a28a05e7806f" class="bulleted-list"><li style="list-style-type:disc"><strong>Initialization Issues:</strong> The pattern might require resetting an object&#x27;s state after cloning, which can be error-prone.</li></ul><p id="f08ce3a5-4b17-4054-85c0-49ecda33fb44" class="">
+</p><h1 id="2276b62c-f7bf-491e-bcb0-c944ee3a7837" class="">Adapter Pattern</h1><blockquote id="d3ffd245-3e07-433d-a4cf-37f16789c20b" class="">Structural Patterns</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e47bf245-ab76-4c08-804f-537cb9b307c6" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const TargetButton = ({ label, onClick }) =&gt; {
+  return &lt;button onClick={onClick}&gt;{label}&lt;/button&gt;;
+};
+
+const adaptBootstrapButton = (BootstrapButton) =&gt; {
+  return ({ label, onClick }) =&gt; {
+    return &lt;BootstrapButton text={label} handleClick={onClick} /&gt;;
+  };
+};
+
+const BootstrapButton = ({ text, handleClick }) =&gt; {
+  return &lt;button className=&quot;btn btn-primary&quot; onClick={handleClick}&gt;{text}&lt;/button&gt;;
+};
+
+const AdaptedBootstrapButton = adaptBootstrapButton(BootstrapButton);
+
+const App = () =&gt; {
+  const handleClick = () =&gt; {
+    alert(&#x27;Button clicked!&#x27;);
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Adapter Pattern Example&lt;/h1&gt;
+      &lt;TargetButton label=&quot;Standard Button&quot; onClick={handleClick} /&gt;
+      &lt;AdaptedBootstrapButton label=&quot;Adapted Bootstrap Button&quot; onClick={handleClick} /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="2eb2c1ad-5298-4c52-ae47-4fb35542f9dc" class="">Pros</h2><ul id="010d25ac-1bb2-4466-a64b-2652dabb4dbe" class="bulleted-list"><li style="list-style-type:disc"><strong>Compatibility:</strong> Allows incompatible interfaces to work together, integrating new components with existing systems.</li></ul><ul id="8c470e7e-36da-4954-b447-07f6bcaa6800" class="bulleted-list"><li style="list-style-type:disc"><strong>Reusability:</strong> Enables the reuse of existing code or components that might otherwise be incompatible.</li></ul><ul id="f221384e-61b6-48cf-8392-6897e7eaaa78" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Provides a way to use third-party libraries or components without modifying their code.</li></ul><ul id="a9e845d3-5df1-4f9d-a513-b5a77d9fece2" class="bulleted-list"><li style="list-style-type:disc"><strong>Separation of Concerns:</strong> Keeps the core functionality separate from the interface adaptation logic.</li></ul><h2 id="9728819f-5b9e-44d3-bcf8-d01c5b01ddf1" class="">Cons</h2><ul id="a6b8d4e6-fa57-426c-bc14-f42e9de2beb1" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> Introduces additional classes and interfaces, potentially making the overall system more complex.</li></ul><ul id="bbebec41-2126-41ef-9ed9-aee22476659a" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance Overhead:</strong> The adaptation process may introduce a slight performance cost due to the extra layer of indirection.</li></ul><ul id="bb894efb-12cd-4b4c-a6ee-dd30d69d4b7b" class="bulleted-list"><li style="list-style-type:disc"><strong>Maintenance:</strong> As the adapted interface evolves, the adapter may need to be updated, requiring ongoing maintenance.</li></ul><ul id="4af7dbc8-d254-48ff-a681-6f8e117108d0" class="bulleted-list"><li style="list-style-type:disc"><strong>Overuse:</strong> Excessive use of adapters can lead to a confusing and hard-to-maintain codebase.</li></ul><p id="8c100f9d-6dec-4790-946d-e9be3760938a" class="">
+</p><h1 id="54834b8e-3443-4a8a-a9ad-1507d5a55fe6" class="">Bridge Pattern</h1><blockquote id="4222967d-3ee4-4119-ba71-db671e2815a4" class="">Structural Patterns</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e77ab748-db96-482a-9f80-b77ccfe99db0" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const Abstraction = ({ implementation, title }) =&gt; {
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{title}&lt;/h2&gt;
+      {implementation.render()}
+    &lt;/div&gt;
+  );
+};
+
+const Implementation = {
+  render: () =&gt; {},
+};
+
+const MaterialButton = () =&gt; {
+  return &lt;button style={{ backgroundColor: &#x27;blue&#x27;, color: &#x27;white&#x27; }}&gt;Material Button&lt;/button&gt;;
+};
+
+const BootstrapButton = () =&gt; {
+  return &lt;button className=&quot;btn btn-primary&quot;&gt;Bootstrap Button&lt;/button&gt;;
+};
+
+const createImplementation = (type) =&gt; {
+  switch (type) {
+    case &#x27;Material&#x27;:
+      return {
+        render: () =&gt; &lt;MaterialButton /&gt;,
+      };
+    case &#x27;Bootstrap&#x27;:
+      return {
+        render: () =&gt; &lt;BootstrapButton /&gt;,
+      };
+    default:
+      throw new Error(&#x27;Unknown implementation type&#x27;);
+  }
+};
+
+const App = () =&gt; {
+  const materialImplementation = createImplementation(&#x27;Material&#x27;);
+  const bootstrapImplementation = createImplementation(&#x27;Bootstrap&#x27;);
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Bridge Pattern Example&lt;/h1&gt;
+      &lt;Abstraction implementation={materialImplementation} title=&quot;Material UI&quot; /&gt;
+      &lt;Abstraction implementation={bootstrapImplementation} title=&quot;Bootstrap UI&quot; /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="5704a06d-0b0e-4bcd-8003-b28f3a0ba7da" class="">Pros</h2><ul id="d59f3454-bab7-4431-8d45-9cf83a205601" class="bulleted-list"><li style="list-style-type:disc"><strong>Separation of Concerns:</strong> Decouples abstraction from implementation, allowing them to vary independently.</li></ul><ul id="02df53ba-50d5-4409-a901-42d92690f47c" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Enables changing implementations at runtime without affecting the abstraction.</li></ul><ul id="8912a750-61c0-4d9e-a683-c4b53d64a826" class="bulleted-list"><li style="list-style-type:disc"><strong>Extensibility:</strong> New abstractions and implementations can be added easily without modifying existing code.</li></ul><ul id="301c89c4-2711-4d52-ad48-d6f1a51688dd" class="bulleted-list"><li style="list-style-type:disc"><strong>Platform Independence:</strong> Useful for cross-platform development where different implementations are needed.</li></ul><h2 id="47b088db-c745-438e-8e9e-ec117eaff34b" class="">Cons</h2><ul id="a821fc0d-935b-4608-ba95-24341eb113ec" class="bulleted-list"><li style="list-style-type:disc"><strong>Increased Complexity:</strong> Introduces additional interfaces and classes, which can complicate the overall design.</li></ul><ul id="ee499c9a-3db9-48f5-83fd-859d3b44f777" class="bulleted-list"><li style="list-style-type:disc"><strong>Overhead:</strong> May result in increased number of classes, potentially impacting performance slightly.</li></ul><ul id="eef11d8b-12f1-4b66-a783-b95bd0568b71" class="bulleted-list"><li style="list-style-type:disc"><strong>Conceptual Difficulty:</strong> Can be challenging to understand and implement correctly for developers unfamiliar with the pattern.</li></ul><ul id="7ad20edd-9aa4-49ff-8c6c-cf959711d50e" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential Overuse:</strong> Not every abstraction-implementation separation requires a bridge, and overuse can lead to unnecessary complexity.</li></ul><h1 id="cabdd7d8-10ea-4d79-bebf-27d16dc2d6bf" class="">Composite Pattern</h1><blockquote id="3191a0d4-abf0-4a4d-89e7-75b057635ec5" class="">Structural Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="73b843b8-e9e9-4ebd-afcf-998d3f024461" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const Component = ({ render }) =&gt; {
+  return render();
+};
+
+const Leaf = ({ name }) =&gt; {
+  return &lt;div&gt;{name}&lt;/div&gt;;
+};
+
+const Composite = ({ name, children }) =&gt; {
+  return (
+    &lt;div&gt;
+      &lt;strong&gt;{name}&lt;/strong&gt;
+      &lt;div style={{ marginLeft: &#x27;20px&#x27; }}&gt;
+        {children.map((child, index) =&gt; (
+          &lt;Component key={index} render={child.render} /&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+const App = () =&gt; {
+  const leaf1 = { render: () =&gt; &lt;Leaf name=&quot;Leaf 1&quot; /&gt; };
+  const leaf2 = { render: () =&gt; &lt;Leaf name=&quot;Leaf 2&quot; /&gt; };
+  const leaf3 = { render: () =&gt; &lt;Leaf name=&quot;Leaf 3&quot; /&gt; };
+
+  const composite1 = {
+    render: () =&gt; (
+      &lt;Composite name=&quot;Composite 1&quot; children={[leaf1, leaf2]} /&gt;
+    ),
+  };
+
+  const composite2 = {
+    render: () =&gt; (
+      &lt;Composite name=&quot;Composite 2&quot; children={[composite1, leaf3]} /&gt;
+    ),
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Composite Pattern Example&lt;/h1&gt;
+      &lt;Component render={composite2.render} /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="a8117243-89dd-485e-8bfd-b122e1a8d7dc" class="">Pros</h2><ul id="2f93e8fb-4115-40eb-8d86-bdaedea9b760" class="bulleted-list"><li style="list-style-type:disc"><strong>Unified Treatment:</strong> Allows individual objects and compositions to be treated uniformly, simplifying client code.</li></ul><ul id="8cab4b13-6a95-4693-9f91-3916be1be86d" class="bulleted-list"><li style="list-style-type:disc"><strong>Hierarchical Structures:</strong> Ideal for representing part-whole hierarchies of objects.</li></ul><ul id="dc3239ed-fb88-4024-9904-e9e84a93c1e7" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Makes it easy to add new types of components without changing existing code.</li></ul><ul id="81eddbc9-deeb-41e6-9db9-2de2fb5c0db2" class="bulleted-list"><li style="list-style-type:disc"><strong>Recursion:</strong> Naturally supports recursive operations on the entire tree structure.</li></ul><h2 id="71eabb9f-a8bf-438f-b559-ae09e3eddf22" class="">Cons</h2><ul id="ac284630-cd0f-4658-8827-70a2ff5e53ee" class="bulleted-list"><li style="list-style-type:disc"><strong>Overgeneralization:</strong> Can make the design overly general, making it harder to restrict components in compositions.</li></ul><ul id="a4c9a1fb-50ea-4b3e-a78e-95e8cc80fd65" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance:</strong> Operations might be inefficient for deeply nested structures.</li></ul><ul id="391daed3-d95d-472a-b359-83c1410f7c06" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> Can complicate the design when dealing with many different types of leaf and composite components.</li></ul><ul id="9e0c0d0a-97cf-4161-baf7-46950311c081" class="bulleted-list"><li style="list-style-type:disc"><strong>Type Safety:</strong> In some languages, it may be challenging to provide type-safe implementations.</li></ul><p id="1b9c1df3-aea1-458f-9b3d-7d97a9aebe93" class="">
+</p><h1 id="ff33aa00-fcab-40d4-8740-48be290a4734" class="">Decorator Pattern</h1><blockquote id="328910e1-4783-4929-b2f1-7b369c06487b" class="">Structural Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ae598bc4-8dc8-42f0-9e19-5c8800189733" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const Button = ({ label, onClick }) =&gt; {
+  return &lt;button onClick={onClick}&gt;{label}&lt;/button&gt;;
+};
+
+const withLogging = (Component) =&gt; {
+  return ({ label, onClick }) =&gt; {
+    const handleClick = () =&gt; {
+      console.log(`Button clicked: ${label}`);
+      onClick();
+    };
+
+    return &lt;Component label={label} onClick={handleClick} /&gt;;
+  };
+};
+
+const withStyle = (Component) =&gt; {
+  return ({ label, onClick }) =&gt; {
+    const style = {
+      backgroundColor: &#x27;blue&#x27;,
+      color: &#x27;white&#x27;,
+      padding: &#x27;10px&#x27;,
+      border: &#x27;none&#x27;,
+      borderRadius: &#x27;5px&#x27;,
+    };
+
+    return &lt;Component label={label} onClick={onClick} style={style} /&gt;;
+  };
+};
+
+const App = () =&gt; {
+  const handleClick = () =&gt; {
+    alert(&#x27;Button clicked!&#x27;);
+  };
+
+  const StyledButton = withStyle(Button);
+  const LoggingButton = withLogging(Button);
+  const StyledLoggingButton = withLogging(withStyle(Button));
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Decorator Pattern Example&lt;/h1&gt;
+      &lt;Button label=&quot;Simple Button&quot; onClick={handleClick} /&gt;
+      &lt;StyledButton label=&quot;Styled Button&quot; onClick={handleClick} /&gt;
+      &lt;LoggingButton label=&quot;Logging Button&quot; onClick={handleClick} /&gt;
+      &lt;StyledLoggingButton label=&quot;Styled Logging Button&quot; onClick={handleClick} /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="622721fb-4cf8-4519-be5e-2a0e367ceb6b" class="">Pros</h2><ul id="becca72f-5ffc-4514-85d9-1d374141630c" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Allows dynamic addition of functionalities to objects without altering their structure.</li></ul><ul id="945353c1-ae46-4b89-9358-232676407b09" class="bulleted-list"><li style="list-style-type:disc"><strong>Open/Closed Principle:</strong> Supports adding new decorators without modifying existing code.</li></ul><ul id="981bf426-f824-42b3-9396-c305883a6939" class="bulleted-list"><li style="list-style-type:disc"><strong>Single Responsibility Principle:</strong> Each decorator focuses on a specific functionality.</li></ul><ul id="e83cfeaa-57e6-4d25-bd85-1978a2c3fe4c" class="bulleted-list"><li style="list-style-type:disc"><strong>Composition over Inheritance:</strong> Provides a more flexible alternative to subclassing for extending functionality.</li></ul><h2 id="3c575aac-3f84-41af-a214-2d866d871a9e" class="">Cons</h2><ul id="bf697114-67ff-416f-9eab-559086f24a74" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> Can lead to many small classes, making the system harder to understand and maintain.</li></ul><ul id="7389ac2e-b785-4e7f-b43d-7304cecfc6f5" class="bulleted-list"><li style="list-style-type:disc"><strong>Order Dependency:</strong> The order of applying decorators can affect the final behavior.</li></ul><ul id="4db1672b-14b6-43dd-9adc-c1bca74635f0" class="bulleted-list"><li style="list-style-type:disc"><strong>Overuse:</strong> Excessive use can result in code that&#x27;s difficult to debug and understand.</li></ul><ul id="7e400964-0607-43d3-8a07-0182e1035ecf" class="bulleted-list"><li style="list-style-type:disc"><strong>Identity Issues:</strong> Decorated components aren&#x27;t identical to the original component, which can cause issues with reference equality.</li></ul><h1 id="4c5506e2-72dd-4088-823b-89e0949aecb2" class="">Facade Pattern</h1><blockquote id="9f6cb029-6f9b-4013-901d-3cfd3e398170" class="">Structural Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="00d8915b-8a9a-4718-9017-4e46bf7b7d45" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const Header = ({ title }) =&gt; {
+  return &lt;header&gt;&lt;h1&gt;{title}&lt;/h1&gt;&lt;/header&gt;;
+};
+
+const Content = ({ text }) =&gt; {
+  return &lt;main&gt;&lt;p&gt;{text}&lt;/p&gt;&lt;/main&gt;;
+};
+
+const Footer = ({ footerText }) =&gt; {
+  return &lt;footer&gt;&lt;p&gt;{footerText}&lt;/p&gt;&lt;/footer&gt;;
+};
+
+const PageFacade = ({ title, text, footerText }) =&gt; {
+  return (
+    &lt;div&gt;
+      &lt;Header title={title} /&gt;
+      &lt;Content text={text} /&gt;
+      &lt;Footer footerText={footerText} /&gt;
+    &lt;/div&gt;
+  );
+};
+
+const App = () =&gt; {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Facade Pattern Example&lt;/h1&gt;
+      &lt;PageFacade 
+        title=&quot;Welcome to My Page&quot; 
+        text=&quot;This is the content of the page.&quot; 
+        footerText=&quot;© 2023 My Website&quot; 
+      /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="68411828-c400-4a3e-bc6c-48bb5f1500e2" class="">Pros</h2><ul id="63b49d28-d35f-4d81-8037-f540f7e39f28" class="bulleted-list"><li style="list-style-type:disc"><strong>Simplification:</strong> Provides a simple interface to a complex subsystem, making it easier to use.</li></ul><ul id="edfab2cf-bf95-48d2-83bc-ec1762a712d8" class="bulleted-list"><li style="list-style-type:disc"><strong>Decoupling:</strong> Reduces dependencies between clients and subsystems, promoting loose coupling.</li></ul><ul id="af2b9c21-e752-4c2e-a79c-dcd17529c3b1" class="bulleted-list"><li style="list-style-type:disc"><strong>Layering:</strong> Helps in defining entry points to each level of a subsystem, useful in layered architectures.</li></ul><ul id="144c7dad-9415-46ae-935d-35dc0a7de262" class="bulleted-list"><li style="list-style-type:disc"><strong>Encapsulation:</strong> Hides the complexities of the subsystem from clients, improving maintainability.</li></ul><h2 id="8c37adbb-07f5-4a79-931a-d257cc21b4fe" class="">Cons</h2><ul id="a69ffe60-8088-4fd8-93a2-3a3a978c6deb" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential for God Object:</strong> The facade might become too large and complex if not designed carefully.</li></ul><ul id="d40417f1-2964-4c0a-ba60-8cda5a8c6616" class="bulleted-list"><li style="list-style-type:disc"><strong>Limited Flexibility:</strong> Clients might need access to lower-level functionality that the facade doesn&#x27;t expose.</li></ul><ul id="684a93fb-d5ef-46ab-bdf2-3578de3e44dd" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance Overhead:</strong> Can introduce a slight performance cost due to the additional layer of abstraction.</li></ul><ul id="34c821f3-65cd-44b8-a788-0b1144e96f83" class="bulleted-list"><li style="list-style-type:disc"><strong>Maintenance Challenges:</strong> Changes in the subsystem might require updates to the facade, potentially affecting multiple clients.</li></ul><h1 id="43bb0b20-50e9-4099-b409-3bc0693dd71b" class="">Flyweights Pattern</h1><blockquote id="b02f2111-fe01-484f-8204-f4b87cccf7d5" class="">Structural Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f89deed0-c225-4847-bc9f-ce21f574891e" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const flyweightFactory = (() =&gt; {
+  const flyweights = {};
+
+  const getFlyweight = (sharedState) =&gt; {
+    const key = JSON.stringify(sharedState);
+    if (!flyweights[key]) {
+      flyweights[key] = sharedState;
+    }
+    return flyweights[key];
+  };
+
+  return {
+    getFlyweight,
+  };
+})();
+
+const FlyweightComponent = ({ sharedState, uniqueState }) =&gt; {
+  const flyweight = flyweightFactory.getFlyweight(sharedState);
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Shared State: {JSON.stringify(flyweight)}&lt;/p&gt;
+      &lt;p&gt;Unique State: {uniqueState}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+};
+
+const App = () =&gt; {
+  const sharedState1 = { color: &#x27;red&#x27;, fontSize: &#x27;14px&#x27; };
+  const sharedState2 = { color: &#x27;blue&#x27;, fontSize: &#x27;16px&#x27; };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Flyweight Pattern Example&lt;/h1&gt;
+      &lt;FlyweightComponent sharedState={sharedState1} uniqueState=&quot;Item 1&quot; /&gt;
+      &lt;FlyweightComponent sharedState={sharedState1} uniqueState=&quot;Item 2&quot; /&gt;
+      &lt;FlyweightComponent sharedState={sharedState2} uniqueState=&quot;Item 3&quot; /&gt;
+      &lt;FlyweightComponent sharedState={sharedState2} uniqueState=&quot;Item 4&quot; /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="9f617c27-6494-40e3-b983-3952ad6ae705" class="">Pros</h2><ul id="f16f6705-c0fc-4328-bf77-5279a408a3fb" class="bulleted-list"><li style="list-style-type:disc"><strong>Memory Efficiency:</strong> Shares common data across multiple objects, reducing memory usage.</li></ul><ul id="3a2ccdd5-fa0f-4db4-8fcb-67a03abe0351" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance:</strong> Can significantly improve performance in systems with a large number of similar objects.</li></ul><ul id="be7cd2f2-2ae6-46e0-b443-7115252666fa" class="bulleted-list"><li style="list-style-type:disc"><strong>Reduced Object Creation:</strong> Minimizes the need for creating new objects, which can be resource-intensive.</li></ul><ul id="c8e5162a-83b2-4358-a0c8-5a297602259b" class="bulleted-list"><li style="list-style-type:disc"><strong>Consistency:</strong> Ensures that shared data remains consistent across all instances.</li></ul><h2 id="391c624c-ad60-4c24-911e-aa47ce0bb7e3" class="">Cons</h2><ul id="69680c67-55cf-47cf-ae2c-1def45838252" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> Can make the code more complex and harder to understand, especially for developers unfamiliar with the pattern.</li></ul><ul id="872fc804-7772-43c7-84b9-ce3f26607f0a" class="bulleted-list"><li style="list-style-type:disc"><strong>Debugging Challenges:</strong> Shared state can make debugging more difficult, as changes in one place affect multiple objects.</li></ul><ul id="6efa4144-e228-4607-865f-c4b66b8b361f" class="bulleted-list"><li style="list-style-type:disc"><strong>Immutability Issues:</strong> Can be challenging to implement with immutable objects, which are often preferred in functional programming.</li></ul><ul id="0ed9d4ea-b1c3-4596-a13e-0b0e0fd2209a" class="bulleted-list"><li style="list-style-type:disc"><strong>Context Sensitivity:</strong> The benefits of the Flyweight pattern are highly dependent on how and where it&#x27;s used in the application.</li></ul><h1 id="bfefc02e-a26d-42c5-9c21-f6197553291b" class="">Proxy Pattern</h1><blockquote id="b220b1df-115d-41a7-930a-3ea5b2ead029" class="">Structural Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6d26c617-0f99-4c75-9661-4f137ccb5684" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const DataComponent = ({ data }) =&gt; {
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Data:&lt;/h2&gt;
+      &lt;p&gt;User ID: {data.userId}&lt;/p&gt;
+      &lt;p&gt;ID: {data.id}&lt;/p&gt;
+      &lt;p&gt;Title: {data.title}&lt;/p&gt;
+      &lt;p&gt;Body: {data.body}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+};
+
+const withDataFetching = (Component) =&gt; {
+  return ({ url }) =&gt; {
+    const [data, setData] = React.useState(null);
+    const [loading, setLoading] = React.useState(true);
+    const [error, setError] = React.useState(null);
+
+    React.useEffect(() =&gt; {
+      const fetchData = async () =&gt; {
+        try {
+          const response = await fetch(url);
+          const result = await response.json();
+          setData(result);
+        } catch (err) {
+          setError(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchData();
+    }, [url]);
+
+    if (loading) return &lt;div&gt;Loading...&lt;/div&gt;;
+    if (error) return &lt;div&gt;Error: {error.message}&lt;/div&gt;;
+
+    return &lt;Component data={data} /&gt;;
+  };
+};
+
+const App = () =&gt; {
+  const DataComponentWithFetching = withDataFetching(DataComponent);
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Proxy Pattern Example&lt;/h1&gt;
+      &lt;DataComponentWithFetching url=&quot;https://jsonplaceholder.typicode.com/posts/1&quot; /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="bf07a618-faa0-4850-98aa-dda654250ef5" class="">Pros</h2><ul id="19c91751-7134-4ca3-9532-84a887051a68" class="bulleted-list"><li style="list-style-type:disc"><strong>Access Control:</strong> Allows for controlling and managing access to the main object.</li></ul><ul id="754a4e77-9cef-4b52-afda-c99ce1c5631e" class="bulleted-list"><li style="list-style-type:disc"><strong>Lazy Loading:</strong> Can implement lazy initialization and loading of resource-heavy objects.</li></ul><ul id="2eee039b-8bd1-488e-ab9d-0f2bfa1eb799" class="bulleted-list"><li style="list-style-type:disc"><strong>Logging and Caching:</strong> Provides a way to add logging and caching mechanisms without changing the original object.</li></ul><ul id="5860e82d-8ee4-43f9-a85c-73a9e761039a" class="bulleted-list"><li style="list-style-type:disc"><strong>Remote Representative:</strong> Can act as a local representative for an object in a different address space.</li></ul><h2 id="3db479d0-0721-48c8-9fa5-a8e841fc5e21" class="">Cons</h2><ul id="8f07d655-0fce-4fd2-9f5d-609a96c24a08" class="bulleted-list"><li style="list-style-type:disc"><strong>Added Complexity:</strong> Introduces an additional layer, which can increase the complexity of the system.</li></ul><ul id="7f43a33b-c2e7-4450-aed9-de50df4bead9" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance Impact:</strong> May cause a slight decrease in performance due to the extra level of indirection.</li></ul><ul id="b01a4dbc-22f1-4e57-943a-7b886778c227" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential for Misuse:</strong> If not implemented carefully, it might hide or change the behavior of the original object unintentionally.</li></ul><ul id="739ac446-6902-4efe-9d43-fdc4c156003d" class="bulleted-list"><li style="list-style-type:disc"><strong>Synchronization Challenges:</strong> In multi-threaded scenarios, ensuring synchronization between the proxy and the real object can be challenging.</li></ul><h1 id="81e4cfdb-4922-4b5f-8468-b74ae6bd7f35" class="">Chain of Responsibility Pattern</h1><blockquote id="3d3d6437-71b1-42fb-80c2-838ee08e4d94" class="">Behavioral Patterns</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5e28a76a-90f9-4e34-8f25-c770a32b8b69" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const createHandler = (handleRequest) =&gt; {
+  return {
+    setNext: function (nextHandler) {
+      this.nextHandler = nextHandler;
+      return nextHandler;
+    },
+    handle: function (request) {
+      handleRequest(request, this.nextHandler);
+    },
+  };
+};
+
+const logHandler = createHandler((request, next) =&gt; {
+  console.log(&#x27;Log Handler:&#x27;, request);
+  if (next) next.handle(request);
+});
+
+const authHandler = createHandler((request, next) =&gt; {
+  if (request.authenticated) {
+    console.log(&#x27;Auth Handler: User authenticated&#x27;);
+    if (next) next.handle(request);
+  } else {
+    console.log(&#x27;Auth Handler: User not authenticated&#x27;);
+  }
+});
+
+const dataHandler = createHandler((request, next) =&gt; {
+  console.log(&#x27;Data Handler:&#x27;, request.data);
+  if (next) next.handle(request);
+});
+
+logHandler.setNext(authHandler).setNext(dataHandler);
+
+const App = () =&gt; {
+  const handleRequest = (request) =&gt; {
+    logHandler.handle(request);
+  };
+
+  const request = {
+    authenticated: true,
+    data: &#x27;Some important data&#x27;,
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Chain of Responsibility Pattern Example&lt;/h1&gt;
+      &lt;button onClick={() =&gt; handleRequest(request)}&gt;Process Request&lt;/button&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="3773256c-efb6-487c-b5de-973b04082b2b" class="">Pros</h2><ul id="bdd0b343-9305-458e-96be-9e7280fdb6be" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Allows for dynamic handling of requests through a chain of handlers.</li></ul><ul id="8b876c1e-2ec0-42d8-b673-2e6a4021ac6b" class="bulleted-list"><li style="list-style-type:disc"><strong>Loose Coupling:</strong> Decouples senders and receivers of requests, promoting modularity.</li></ul><ul id="341afaf4-8962-4221-a212-151ffd050462" class="bulleted-list"><li style="list-style-type:disc"><strong>Simplifies Object Relationships:</strong> Reduces dependencies between objects in a system.</li></ul><ul id="f019c36e-5dd9-440f-8ee3-7c34a46622d6" class="bulleted-list"><li style="list-style-type:disc"><strong>Extensibility:</strong> Easy to add new handlers to the chain without modifying existing code.</li></ul><h2 id="de99dcb4-1cb9-4b2f-b799-1113bddca126" class="">Cons</h2><ul id="6cc50d49-2ee0-4e7a-abd5-37d6522cb22c" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential Performance Issues:</strong> Long chains can lead to slower request processing.</li></ul><ul id="b7e18bf2-507a-433d-8828-3d0f6e9f0eda" class="bulleted-list"><li style="list-style-type:disc"><strong>Lack of Guaranteed Handling:</strong> A request might go unhandled if no appropriate handler is found in the chain.</li></ul><ul id="75b60ccb-ff2e-4477-a60b-a61041ae6b57" class="bulleted-list"><li style="list-style-type:disc"><strong>Debugging Challenges:</strong> Can be difficult to debug and track the flow of a request through the chain.</li></ul><ul id="e956474c-043c-42ac-9b05-e5c4cbc58593" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential for Circular References:</strong> If not implemented carefully, it can lead to circular references in the chain.</li></ul><h1 id="d5ddd6a0-95de-4dea-af1e-3fa929e520da" class="">Command Pattern</h1><blockquote id="8207e8bb-122a-497e-8561-5eace04c729b" class="">Behavioral Patterns</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="56bc3677-2490-4b9b-a23c-e9ae3eddcb25" class="code"><code class="language-TypeScript">
+type Command = () =&gt; void;
+
+
+const turnOnLight: Command = () =&gt; {
+  console.log(&quot;The light is on&quot;);
+};
+
+const turnOffLight: Command = () =&gt; {
+  console.log(&quot;The light is off&quot;);
+};
+
+
+const Invoker = ({ executeCommand }: { executeCommand: Command }) =&gt; {
+  return (
+    &lt;button onClick={executeCommand}&gt;
+      Execute Command
+    &lt;/button&gt;
+  );
+};
+
+
+const App = () =&gt; {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Command Pattern Example&lt;/h1&gt;
+      &lt;Invoker executeCommand={turnOnLight} /&gt;
+      &lt;Invoker executeCommand={turnOffLight} /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="8776f498-cc31-4bd5-a29a-5fabf8681ee0" class="">Pros</h2><ul id="e518cb11-68bf-4b2e-94c3-8ea3a549c7a2" class="bulleted-list"><li style="list-style-type:disc"><strong>Decoupling:</strong> Separates the request for an action from its execution, allowing for more flexible systems.</li></ul><ul id="a35b3e40-9e10-4b99-a281-3124d74dbbea" class="bulleted-list"><li style="list-style-type:disc"><strong>Extensibility:</strong> New commands can be added without changing existing code, adhering to the Open/Closed principle.</li></ul><ul id="7d3a96e9-d802-496d-b796-9d25022270c1" class="bulleted-list"><li style="list-style-type:disc"><strong>Parameterization:</strong> Objects can be parameterized with different requests or commands.</li></ul><ul id="ac10909c-dc6c-461c-b103-c7ffe5bfd55d" class="bulleted-list"><li style="list-style-type:disc"><strong>Queueing and Logging:</strong> Commands can be queued, logged, or undone, providing more control over operations.</li></ul><h2 id="c4affc5c-17f6-4ec9-a222-8062e94a67fb" class="">Cons</h2><ul id="e1a0fb92-493d-42b3-a9fd-36d1b164b72a" class="bulleted-list"><li style="list-style-type:disc"><strong>Increased Complexity:</strong> Can lead to an explosion of small command classes that inflate the overall design.</li></ul><ul id="009cd7d9-dc5c-42a3-9702-08ee5ab2fe97" class="bulleted-list"><li style="list-style-type:disc"><strong>Memory Overhead:</strong> Each command is a separate object, which can increase memory usage.</li></ul><ul id="6ec030d9-2124-4d0c-a08e-ebcd0609d9eb" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential Overuse:</strong> Not every action needs to be a command, and overuse can complicate simple designs.</li></ul><ul id="0c94fd3c-2e90-401e-afb9-d6aebd6f9cc9" class="bulleted-list"><li style="list-style-type:disc"><strong>Learning Curve:</strong> The pattern can be unintuitive for developers not familiar with it, potentially leading to misuse.</li></ul><p id="f650b841-05a4-4c9a-969a-072da217fa3e" class="">
+</p><h1 id="8072e4ec-bf17-4af8-a8d0-1a66c9bd77d8" class="">Interpreter Pattern</h1><blockquote id="896907ea-252b-4021-8122-32901f89d2a9" class="">Behavioral Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8ec44f92-62b1-4887-bb7a-e183c327ad10" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const createExpression = (interpret) =&gt; {
+  return {
+    interpret,
+  };
+};
+
+const NumberExpression = (value) =&gt; {
+  return createExpression(() =&gt; value);
+};
+
+const AddExpression = (left, right) =&gt; {
+  return createExpression((context) =&gt; left.interpret(context) + right.interpret(context));
+};
+
+const SubtractExpression = (left, right) =&gt; {
+  return createExpression((context) =&gt; left.interpret(context) - right.interpret(context));
+};
+
+const VariableExpression = (name) =&gt; {
+  return createExpression((context) =&gt; context[name]);
+};
+
+const createContext = (variables) =&gt; {
+  return variables;
+};
+
+// Step 4: Use the Interpreter in a React Functional Component
+const App = () =&gt; {
+  const context = createContext({ x: 10, y: 20 });
+
+  const expression = AddExpression(
+    VariableExpression(&#x27;x&#x27;),
+    SubtractExpression(NumberExpression(5), VariableExpression(&#x27;y&#x27;))
+  );
+
+  const result = expression.interpret(context);
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Interpreter Pattern Example&lt;/h1&gt;
+      &lt;p&gt;Expression: x + (5 - y)&lt;/p&gt;
+      &lt;p&gt;Context: {JSON.stringify(context)}&lt;/p&gt;
+      &lt;p&gt;Result: {result}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="4bdffefd-35a7-49f3-95ab-ad89b5aa2bf2" class="">Pros</h2><ul id="3b4a5b55-7cbb-4c9e-84fe-9e5cf6f40b95" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Allows for creating complex expressions from simple ones, providing a high degree of flexibility in interpreting language constructs.</li></ul><ul id="57b2d96f-1c23-433d-b9c1-4934b00b5252" class="bulleted-list"><li style="list-style-type:disc"><strong>Extensibility:</strong> New expressions can be added easily without modifying existing ones, adhering to the Open/Closed principle.</li></ul><ul id="f6014f74-7713-4317-9bfc-cda04dc9ba3d" class="bulleted-list"><li style="list-style-type:disc"><strong>Separation of Concerns:</strong> Separates the grammar from the interpretation, making it easier to manage and maintain complex language processing.</li></ul><ul id="be8a374c-d737-4c88-9ac8-3f18923bfd6f" class="bulleted-list"><li style="list-style-type:disc"><strong>Domain-Specific Language Support:</strong> Excellent for implementing domain-specific languages (DSLs) or simple scripting capabilities within applications.</li></ul><h2 id="cd8af178-b309-4774-8dbe-2bb4b621b74b" class="">Cons</h2><ul id="248b5b50-b09f-4a9c-9953-bdf9dbf9784c" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> For complex grammars, the class hierarchy can become large and difficult to manage.</li></ul><ul id="5d796a4d-cffa-4b0a-bad6-b77f651b9365" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance:</strong> Can be inefficient for interpreting complex expressions, especially when compared to compiled languages.</li></ul><ul id="e69f9f29-4f0d-43c7-b04f-37a2e02cc4fe" class="bulleted-list"><li style="list-style-type:disc"><strong>Limited Applicability:</strong> Primarily useful for specific problems involving language interpretation, which may limit its general applicability.</li></ul><ul id="f806b3a3-8877-4a0f-b399-87f7ade798ae" class="bulleted-list"><li style="list-style-type:disc"><strong>Maintenance Challenges:</strong> Changes to the grammar can require modifications across multiple classes, potentially making maintenance more difficult.</li></ul><h1 id="08128364-8729-4eea-97c5-4adc6e556abc" class="">Iterator Pattern</h1><blockquote id="06804a54-b78a-4e18-9bc7-44816695de10" class="">Behavioral Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2430d330-a834-433a-af1e-d2aa3c0766e6" class="code"><code class="language-TypeScript">import React from &#x27;react&#x27;;
+
+const createIterator = (items) =&gt; {
+  let index = 0;
+
+  return {
+    next: () =&gt; {
+      const done = index &gt;= items.length;
+      const value = !done ? items[index++] : undefined;
+      return { value, done };
+    },
+    hasNext: () =&gt; index &lt; items.length,
+  };
+};
+
+const arrayIterator = (array) =&gt; {
+  return createIterator(array);
+};
+
+const App = () =&gt; {
+  const items = [&#x27;Item 1&#x27;, &#x27;Item 2&#x27;, &#x27;Item 3&#x27;, &#x27;Item 4&#x27;];
+  const iterator = arrayIterator(items);
+
+  const [currentItem, setCurrentItem] = React.useState(iterator.next().value);
+
+  const handleNext = () =&gt; {
+    if (iterator.hasNext()) {
+      setCurrentItem(iterator.next().value);
+    }
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Iterator Pattern Example&lt;/h1&gt;
+      &lt;p&gt;Current Item: {currentItem}&lt;/p&gt;
+      &lt;button onClick={handleNext} disabled={!iterator.hasNext()}&gt;
+        Next
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="ae028f32-b1ca-47e2-809d-6a0acb00fb8e" class="">Pros</h2><ul id="3b631160-32e3-40e6-894c-429f7fb41166" class="bulleted-list"><li style="list-style-type:disc"><strong>Uniform Access:</strong> Provides a standard way to traverse different types of collections.</li></ul><ul id="6c937b1d-7d05-458f-a71a-d33cb779ca42" class="bulleted-list"><li style="list-style-type:disc"><strong>Simplifies Client Code:</strong> Clients don&#x27;t need to know the underlying structure of the collection.</li></ul><ul id="d6b2cb7e-bacc-4d21-a41b-76530b244754" class="bulleted-list"><li style="list-style-type:disc"><strong>Decoupling:</strong> Separates the traversal algorithm from the collection structure.</li></ul><ul id="22b3bb05-2c12-4d84-9c62-d64e82388d6a" class="bulleted-list"><li style="list-style-type:disc"><strong>Multiple Traversals:</strong> Allows for concurrent traversals of the same collection.</li></ul><h2 id="056847bc-a786-4395-9fe1-fa78de39826e" class="">Cons</h2><ul id="fba27dc5-25d4-47a7-b8eb-e342ad59a319" class="bulleted-list"><li style="list-style-type:disc"><strong>Overhead:</strong> Can introduce additional complexity for simple collections.</li></ul><ul id="6b3c8557-21a8-46e2-90e0-d203c765cf03" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance:</strong> May be less efficient than direct access for some data structures.</li></ul><ul id="be311068-be13-4337-84cd-8ba4e4ee881d" class="bulleted-list"><li style="list-style-type:disc"><strong>Limited Functionality:</strong> Basic iterators might not support operations like backwards traversal or skipping elements.</li></ul><ul id="1ce23f11-dd3a-45e0-9425-3ad2935467fe" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential for Stale Iterators:</strong> If the collection is modified during iteration, it can lead to inconsistent behavior.</li></ul><h1 id="a486202b-d8a0-45cc-816c-6b586af6682a" class="">Mediator Pattern</h1><blockquote id="21c6da4f-e6f7-4164-9c7d-783b093b85c7" class="">Behavioral Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="587665ee-da6d-4fcf-af82-4a17701eed3e" class="code"><code class="language-TypeScript">import React, { useState } from &#x27;react&#x27;;
+
+const createMediator = () =&gt; {
+  const subscribers = {};
+
+  return {
+    subscribe: (event, callback) =&gt; {
+      if (!subscribers[event]) {
+        subscribers[event] = [];
+      }
+      subscribers[event].push(callback);
+    },
+    notify: (event, data) =&gt; {
+      if (subscribers[event]) {
+        subscribers[event].forEach(callback =&gt; callback(data));
+      }
+    },
+  };
+};
+
+const mediator = createMediator();
+
+const ComponentA = () =&gt; {
+  const [message, setMessage] = useState(&#x27;&#x27;);
+
+  const sendMessage = () =&gt; {
+    mediator.notify(&#x27;message&#x27;, message);
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Component A&lt;/h2&gt;
+      &lt;input
+        type=&quot;text&quot;
+        value={message}
+        onChange={(e) =&gt; setMessage(e.target.value)}
+      /&gt;
+      &lt;button onClick={sendMessage}&gt;Send Message&lt;/button&gt;
+    &lt;/div&gt;
+  );
+};
+
+const ComponentB = () =&gt; {
+  const [receivedMessage, setReceivedMessage] = useState(&#x27;&#x27;);
+
+  React.useEffect(() =&gt; {
+    mediator.subscribe(&#x27;message&#x27;, (message) =&gt; {
+      setReceivedMessage(message);
+    });
+  }, []);
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Component B&lt;/h2&gt;
+      &lt;p&gt;Received Message: {receivedMessage}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+};
+
+const App = () =&gt; {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Mediator Pattern Example&lt;/h1&gt;
+      &lt;ComponentA /&gt;
+      &lt;ComponentB /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="d1f2cc4e-973c-4331-888e-e11ba715ebe7" class="">Pros</h2><ul id="48ec23d5-788e-4527-9e65-caa29aacec42" class="bulleted-list"><li style="list-style-type:disc"><strong>Reduced dependencies:</strong> Components communicate through the mediator, reducing direct dependencies between them.</li></ul><ul id="e2e68158-1626-425e-8066-113c6e17155c" class="bulleted-list"><li style="list-style-type:disc"><strong>Centralized control:</strong> The mediator centralizes complex communication logic, making it easier to manage and modify.</li></ul><ul id="6995f746-80e4-4b80-8180-9860dcbfc9b5" class="bulleted-list"><li style="list-style-type:disc"><strong>Improved maintainability:</strong> Changes to communication patterns can be made in one place (the mediator) rather than across multiple components.</li></ul><ul id="7005cc5f-35c6-4ef3-a6ae-7b7edd894fd8" class="bulleted-list"><li style="list-style-type:disc"><strong>Promotes loose coupling:</strong> Components are not aware of each other, only of the mediator, leading to a more flexible system.</li></ul><h2 id="b39dab15-cd36-435c-a9aa-47d1bc62b827" class="">Cons</h2><ul id="e0283a18-0aba-43ca-bd28-e569c2b66cbe" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential complexity:</strong> The mediator can become complex and difficult to maintain if it handles too many responsibilities.</li></ul><ul id="fd333949-e48a-4ae8-8dc4-bc0dce8483ec" class="bulleted-list"><li style="list-style-type:disc"><strong>Single point of failure:</strong> If the mediator fails, it can affect the entire system&#x27;s communication.</li></ul><ul id="c6ab4f28-794e-4e9d-b04f-ff411c9fb135" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance overhead:</strong> All communication going through a central point can potentially create a bottleneck in high-traffic scenarios.</li></ul><ul id="981b8217-af98-4117-8edf-48a1b6227646" class="bulleted-list"><li style="list-style-type:disc"><strong>Violation of the single responsibility principle:</strong> The mediator might take on too many responsibilities, making it harder to understand and test.</li></ul><h1 id="2fb6043b-684b-4614-a137-effba949cab5" class="">Memento Pattern</h1><blockquote id="7328f919-981d-42f2-b10c-09a779f5fad4" class="">Behavioral Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cf08481e-64e6-4c5e-ba29-5f1cf082e594" class="code"><code class="language-TypeScript">import React, { useState } from &#x27;react&#x27;;
+
+const createMemento = (state) =&gt; {
+  return { ...state };
+};
+
+const useMemento = () =&gt; {
+  const [history, setHistory] = useState([]);
+  const [currentState, setCurrentState] = useState({});
+
+  const saveState = (state) =&gt; {
+    setHistory([...history, createMemento(state)]);
+    setCurrentState(state);
+  };
+
+  const restoreState = () =&gt; {
+    if (history.length &gt; 0) {
+      const previousState = history[history.length - 1];
+      setHistory(history.slice(0, -1));
+      setCurrentState(previousState);
+    }
+  };
+
+  return [currentState, saveState, restoreState];
+};
+
+const App = () =&gt; {
+  const [state, saveState, restoreState] = useMemento();
+  const [inputValue, setInputValue] = useState(&#x27;&#x27;);
+
+  const handleSave = () =&gt; {
+    saveState({ inputValue });
+  };
+
+  const handleRestore = () =&gt; {
+    restoreState();
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Memento Pattern Example&lt;/h1&gt;
+      &lt;input
+        type=&quot;text&quot;
+        value={state.inputValue || &#x27;&#x27;}
+        onChange={(e) =&gt; setInputValue(e.target.value)}
+      /&gt;
+      &lt;button onClick={handleSave}&gt;Save State&lt;/button&gt;
+      &lt;button onClick={handleRestore}&gt;Restore State&lt;/button&gt;
+      &lt;p&gt;Current State: {state.inputValue}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="b502f8a0-107c-4c24-8124-72858d389494" class="">Pros</h2><ul id="9229952f-928b-4abc-a5a9-2f851df76e3d" class="bulleted-list"><li style="list-style-type:disc"><strong>Undo functionality:</strong> Easily implement undo/redo operations in applications.</li></ul><ul id="7f0e94fd-c182-4e12-b6a4-0bcd43a7eca7" class="bulleted-list"><li style="list-style-type:disc"><strong>State preservation:</strong> Capture and restore object states without violating encapsulation.</li></ul><ul id="99799f64-d559-4d79-a6ad-34ca3ef5ffa0" class="bulleted-list"><li style="list-style-type:disc"><strong>Simplifies originator:</strong> The originator doesn&#x27;t need to handle its history, reducing its complexity.</li></ul><ul id="f4464447-634e-4e80-bb23-03c6dd74bde5" class="bulleted-list"><li style="list-style-type:disc"><strong>Snapshot creation:</strong> Create point-in-time snapshots of an object&#x27;s state.</li></ul><h2 id="0fafaf0e-1394-40b3-9f82-19788795c74a" class="">Cons</h2><ul id="da745b7e-1a68-4fdb-935f-e89b35f2009d" class="bulleted-list"><li style="list-style-type:disc"><strong>Memory usage:</strong> Storing multiple states can consume significant memory, especially for large objects.</li></ul><ul id="a0c768f5-54e6-4f69-a5fe-e8d3532c8a2c" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance impact:</strong> Creating and restoring mementos frequently can affect application performance.</li></ul><ul id="e7e2c73d-18ea-4b7d-80e5-afa7e9ec4c77" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential for data exposure:</strong> Care must be taken to ensure the memento doesn&#x27;t expose more information than necessary.</li></ul><ul id="211c9b6d-8054-4921-91db-e353332b3e39" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity in managing history:</strong> For complex objects or long histories, managing mementos can become complicated.</li></ul><h1 id="b0560bff-aa79-4ec0-872d-ceb81d08cf02" class="">Observer Pattern</h1><blockquote id="4991ff23-b672-4708-a3c1-b00db8bf50a5" class="">Behavioral Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4fa5b906-f780-4589-a8fe-970e5fd65f23" class="code"><code class="language-TypeScript">import React, { useState, useEffect } from &#x27;react&#x27;;
+
+const createObserver = (update) =&gt; {
+  return { update };
+};
+
+
+const createConcreteObserver = (name) =&gt; {
+  return createObserver((state) =&gt; {
+    console.log(`${name} received state update:`, state);
+  });
+};
+
+const createSubject = () =&gt; {
+  const observers = [];
+
+  return {
+    subscribe: (observer) =&gt; {
+      observers.push(observer);
+    },
+    unsubscribe: (observer) =&gt; {
+      const index = observers.indexOf(observer);
+      if (index &gt; -1) {
+        observers.splice(index, 1);
+      }
+    },
+    notify: (state) =&gt; {
+      observers.forEach((observer) =&gt; observer.update(state));
+    },
+  };
+};
+
+const App = () =&gt; {
+  const [state, setState] = useState(&#x27;&#x27;);
+  const subject = createSubject();
+
+  const observerA = createConcreteObserver(&#x27;Observer A&#x27;);
+  const observerB = createConcreteObserver(&#x27;Observer B&#x27;);
+
+  useEffect(() =&gt; {
+    subject.subscribe(observerA);
+    subject.subscribe(observerB);
+
+    return () =&gt; {
+      subject.unsubscribe(observerA);
+      subject.unsubscribe(observerB);
+    };
+  }, [subject]);
+
+  const handleChange = (e) =&gt; {
+    const newState = e.target.value;
+    setState(newState);
+    subject.notify(newState);
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Observer Pattern Example&lt;/h1&gt;
+      &lt;input type=&quot;text&quot; value={state} onChange={handleChange} /&gt;
+      &lt;p&gt;Current State: {state}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="e09f33e3-01cf-4bdb-9bfd-a47c7b3b38ba" class="">Pros</h2><ul id="d8c6269b-e804-474f-8753-05476575514a" class="bulleted-list"><li style="list-style-type:disc"><strong>Loose coupling:</strong> Subjects and observers can interact without detailed knowledge of each other.</li></ul><ul id="5db49954-7cd8-4cf4-bd55-b18f8f3c57c8" class="bulleted-list"><li style="list-style-type:disc"><strong>Broadcast communication:</strong> Allows efficient distribution of events to multiple interested parties.</li></ul><ul id="8fce10ca-9e50-4053-a9d9-c1577d9fb1bb" class="bulleted-list"><li style="list-style-type:disc"><strong>Dynamic relationships:</strong> Observers can be added or removed at runtime.</li></ul><ul id="625fae9a-79c7-4e9f-ae01-048818681036" class="bulleted-list"><li style="list-style-type:disc"><strong>Support for the principle of separation of concerns:</strong> The subject is separate from the objects that use its state.</li></ul><h2 id="ed3b667a-5ce0-42d8-8ba2-7f545e5a3563" class="">Cons</h2><ul id="17a2859a-0d84-444e-b0d4-ed769ffc2eaa" class="bulleted-list"><li style="list-style-type:disc"><strong>Unexpected updates:</strong> Observers might be notified in an unpredictable order.</li></ul><ul id="10b0a964-0f61-4350-aa8f-4aec38c33ddf" class="bulleted-list"><li style="list-style-type:disc"><strong>Memory leaks:</strong> If observers are not properly unsubscribed, they can cause memory issues.</li></ul><ul id="f24c09e4-c892-4f88-a733-6c61a8cbf567" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance overhead:</strong> For a large number of observers, notifying all of them can be costly.</li></ul><ul id="625b267c-66ce-411a-9bd1-48f6cf97e13e" class="bulleted-list"><li style="list-style-type:disc"><strong>Complex debugging:</strong> The flow of the program can be harder to follow and debug.</li></ul><h1 id="8897783c-5534-43d6-8fba-31f31866612f" class="">State Pattern</h1><blockquote id="9c32747a-1565-429c-a07a-ddccd5916a91" class="">Behavioral Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="19be1c1d-9ed1-4b6e-af05-0f96b3312869" class="code"><code class="language-TypeScript">import React, { useState } from &#x27;react&#x27;;
+
+const createState = (handle) =&gt; {
+  return { handle };
+};
+
+const createConcreteStateA = (context) =&gt; {
+  return createState(() =&gt; {
+    console.log(&#x27;State A: Transitioning to State B&#x27;);
+    context.setState(createConcreteStateB(context));
+  });
+};
+
+const createConcreteStateB = (context) =&gt; {
+  return createState(() =&gt; {
+    console.log(&#x27;State B: Transitioning to State A&#x27;);
+    context.setState(createConcreteStateA(context));
+  });
+};
+
+const createContext = () =&gt; {
+  const [state, setState] = useState(null);
+
+  return {
+    state,
+    setState,
+    handle: () =&gt; {
+      if (state) {
+        state.handle();
+      }
+    },
+  };
+};
+
+const App = () =&gt; {
+  const context = createContext();
+
+  React.useEffect(() =&gt; {
+    context.setState(createConcreteStateA(context));
+  }, []);
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;State Pattern Example&lt;/h1&gt;
+      &lt;button onClick={context.handle}&gt;Trigger State Transition&lt;/button&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="3b99743a-7ebc-41df-84b2-ee90925dfb94" class="">Pros</h2><ul id="9e80a26e-07de-435a-9962-b978b6d9e2ac" class="bulleted-list"><li style="list-style-type:disc"><strong>Encapsulates state-specific behavior:</strong> Each state is represented as a separate class, making it easier to manage and modify state-specific behavior.</li></ul><ul id="194e1b52-c576-4f0e-8631-8f7c3714d5c6" class="bulleted-list"><li style="list-style-type:disc"><strong>Simplifies state transitions:</strong> State changes are handled by the state objects themselves, reducing complexity in the context object.</li></ul><ul id="58ee7396-04c5-4392-8bf5-2ea66a819134" class="bulleted-list"><li style="list-style-type:disc"><strong>Improves code organization:</strong> State-specific code is isolated, making the codebase more modular and easier to understand.</li></ul><ul id="655fb939-1c6c-4b53-ae54-6718cf7b3a7f" class="bulleted-list"><li style="list-style-type:disc"><strong>Open/Closed Principle:</strong> New states can be added without modifying existing state classes or the context.</li></ul><h2 id="6e7bf030-8246-46a7-8ba8-1aa5df698d1f" class="">Cons</h2><ul id="7db9ce60-a512-4687-98c9-1b2cb5299cef" class="bulleted-list"><li style="list-style-type:disc"><strong>Increased number of classes:</strong> Each state requires its own class, which can lead to a proliferation of classes in complex systems.</li></ul><ul id="3d97f228-fd47-492b-99a6-b8e1a0b8c5fe" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential for tight coupling:</strong> State classes may become tightly coupled to the context if they need to access or modify context data.</li></ul><ul id="e44064ee-70bf-4f25-8ab1-5a293bbac73a" class="bulleted-list"><li style="list-style-type:disc"><strong>Overhead for simple state machines:</strong> For systems with only a few states and simple transitions, the pattern might introduce unnecessary complexity.</li></ul><ul id="e92942a8-e643-417f-b7ae-b5fe408e3ccd" class="bulleted-list"><li style="list-style-type:disc"><strong>Difficulty in managing shared state:</strong> If states need to share data, it can be challenging to manage and may lead to increased coupling between state classes.</li></ul><h1 id="4e8909a7-fe50-407c-a29b-34135eba6456" class="">Strategy Pattern</h1><blockquote id="b978d4c9-5864-4bf5-b7c6-078e55128bdf" class="">Behavioral Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0a028085-d051-48a1-b65c-43f81dd7535f" class="code"><code class="language-TypeScript">import React, { useState } from &#x27;react&#x27;;
+
+const createStrategy = (execute) =&gt; {
+  return { execute };
+};
+
+const strategyA = createStrategy(() =&gt; {
+  return &#x27;Executing Strategy A&#x27;;
+});
+
+const strategyB = createStrategy(() =&gt; {
+  return &#x27;Executing Strategy B&#x27;;
+});
+
+const strategyC = createStrategy(() =&gt; {
+  return &#x27;Executing Strategy C&#x27;;
+});
+
+const App = () =&gt; {
+  const [currentStrategy, setCurrentStrategy] = useState(strategyA);
+
+  const handleStrategyChange = (strategy) =&gt; {
+    setCurrentStrategy(strategy);
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Strategy Pattern Example&lt;/h1&gt;
+      &lt;div&gt;
+        &lt;button onClick={() =&gt; handleStrategyChange(strategyA)}&gt;Strategy A&lt;/button&gt;
+        &lt;button onClick={() =&gt; handleStrategyChange(strategyB)}&gt;Strategy B&lt;/button&gt;
+        &lt;button onClick={() =&gt; handleStrategyChange(strategyC)}&gt;Strategy C&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;p&gt;{currentStrategy.execute()}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="c9d98022-c8f5-4197-8043-c76dd74aec37" class="">Pros</h2><ul id="19d202d1-9553-4bfa-b429-541399cde0ac" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Allows for easy swapping of algorithms at runtime.</li></ul><ul id="8db258b1-1107-4b40-8339-acc7de5965a2" class="bulleted-list"><li style="list-style-type:disc"><strong>Encapsulation:</strong> Each strategy encapsulates its own algorithm, promoting separation of concerns.</li></ul><ul id="99b8fa97-cd9a-41c1-ac7d-051d5cf11fd9" class="bulleted-list"><li style="list-style-type:disc"><strong>Open/Closed Principle:</strong> New strategies can be added without modifying existing code.</li></ul><ul id="902c39fc-0a28-4bc1-9207-f8656cec975c" class="bulleted-list"><li style="list-style-type:disc"><strong>Eliminates conditional statements:</strong> Replaces complex conditional logic with polymorphism.</li></ul><h2 id="9561a908-fbdc-4ecc-abf7-ff7f509b21c4" class="">Cons</h2><ul id="760f8b42-6e1b-4b11-b12d-60d692f22277" class="bulleted-list"><li style="list-style-type:disc"><strong>Increased number of objects:</strong> Each strategy is a separate object, which can lead to more objects in the system.</li></ul><ul id="09134ac0-5ade-4b8b-857f-9210b059cea1" class="bulleted-list"><li style="list-style-type:disc"><strong>Client must be aware of strategies:</strong> The client needs to understand the differences between strategies to choose the appropriate one.</li></ul><ul id="e186a216-e74d-4758-8b10-0fc1fcc2e764" class="bulleted-list"><li style="list-style-type:disc"><strong>Communication overhead:</strong> Strategies may require data from the context, which can increase coupling.</li></ul><ul id="e6c22d56-b7fc-45e9-a156-bfd3abe3ad8a" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential overkill for simple variations:</strong> For minor algorithmic variations, using the Strategy pattern might introduce unnecessary complexity.</li></ul><h1 id="7c8eaa2f-9612-4974-8974-7958551c2958" class="">Template Method Pattern</h1><blockquote id="cd427cf5-4813-4eae-ba26-ea10e981f16d" class="">Behavioral Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14103bf1-e58e-4dc9-bb6c-89805f28e3a8" class="code"><code class="language-TypeScript">import React, { useState } from &#x27;react&#x27;;
+
+const createTemplateMethod = (steps) =&gt; {
+  return () =&gt; {
+    return steps.map((step, index) =&gt; step.execute(index)).join(&#x27; -&gt; &#x27;);
+  };
+};
+
+const stepA1 = {
+  execute: (index) =&gt; `Step A1 (${index})`,
+};
+
+const stepA2 = {
+  execute: (index) =&gt; `Step A2 (${index})`,
+};
+
+const stepB1 = {
+  execute: (index) =&gt; `Step B1 (${index})`,
+};
+
+const stepB2 = {
+  execute: (index) =&gt; `Step B2 (${index})`,
+};
+
+const templateMethodA = createTemplateMethod([stepA1, stepA2]);
+const templateMethodB = createTemplateMethod([stepB1, stepB2]);
+
+const App = () =&gt; {
+  const [currentTemplateMethod, setCurrentTemplateMethod] = useState(() =&gt; templateMethodA);
+
+  const handleTemplateChange = (templateMethod) =&gt; {
+    setCurrentTemplateMethod(() =&gt; templateMethod);
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Template Method Pattern Example&lt;/h1&gt;
+      &lt;div&gt;
+        &lt;button onClick={() =&gt; handleTemplateChange(templateMethodA)}&gt;Template A&lt;/button&gt;
+        &lt;button onClick={() =&gt; handleTemplateChange(templateMethodB)}&gt;Template B&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;p&gt;{currentTemplateMethod()}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="d603369e-1703-4101-a45e-28993e5baef0" class="">Pros</h2><ul id="4e22c576-3c65-44cc-b490-86b11525056f" class="bulleted-list"><li style="list-style-type:disc"><strong>Defines a skeleton of an algorithm:</strong> Allows subclasses to redefine certain steps without changing the algorithm&#x27;s structure.</li></ul><ul id="add86389-1800-49a1-81fc-7f155a59c074" class="bulleted-list"><li style="list-style-type:disc"><strong>Code reuse:</strong> Common code is placed in a base class, reducing duplication.</li></ul><ul id="50cd4d8c-9bb7-4bb8-a2a1-fe25f4b1b985" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Provides hooks for subclasses to extend the algorithm at specific points.</li></ul><ul id="e4bee907-14d8-4b60-a2a3-cdfc5677344d" class="bulleted-list"><li style="list-style-type:disc"><strong>Inversion of control:</strong> The base class calls the operations of subclasses, not vice versa.</li></ul><h2 id="466d9c4d-b937-4331-8d5e-9525f6626e09" class="">Cons</h2><ul id="e384e6ef-ee31-47f6-843a-28a149c3b880" class="bulleted-list"><li style="list-style-type:disc"><strong>Restricted to the provided skeleton:</strong> Subclasses are limited to overriding only the steps defined in the template method.</li></ul><ul id="49bad6bf-b7eb-4178-a5c9-02cb12c790db" class="bulleted-list"><li style="list-style-type:disc"><strong>Maintenance challenges:</strong> Changes to the template method can affect all subclasses.</li></ul><ul id="eb70a0f7-b2c6-4cef-b831-c6e039b1ca6d" class="bulleted-list"><li style="list-style-type:disc"><strong>Violation of Liskov Substitution Principle:</strong> Subclasses might be forced to implement methods they don&#x27;t need.</li></ul><ul id="665b0ee7-0a05-4f80-aa0e-f12ff2962372" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity for simple scenarios:</strong> Can introduce unnecessary complexity for straightforward algorithms.</li></ul><h1 id="cc56d6c3-0efa-4bff-ae13-263502e8b00d" class="">Visitor Pattern</h1><blockquote id="648c8d7c-50e9-4536-88f5-04a89140fc2d" class="">Behavioral Pattern</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b40e5aea-f82c-4ded-a314-db7fb3a02c32" class="code"><code class="language-TypeScript">import React, { useState } from &#x27;react&#x27;;
+
+const createVisitor = (visit) =&gt; {
+  return { visit };
+};
+
+const visitorA = createVisitor((element) =&gt; {
+  return `Visitor A visited ${element.name}`;
+});
+
+const visitorB = createVisitor((element) =&gt; {
+  return `Visitor B visited ${element.name}`;
+});
+
+const createElement = (name) =&gt; {
+  return {
+    name,
+    accept: (visitor) =&gt; visitor.visit({ name }),
+  };
+};
+
+const element1 = createElement(&#x27;Element 1&#x27;);
+const element2 = createElement(&#x27;Element 2&#x27;);
+
+const App = () =&gt; {
+  const [currentVisitor, setCurrentVisitor] = useState(visitorA);
+  const [result, setResult] = useState(&#x27;&#x27;);
+
+  const handleVisitorChange = (visitor) =&gt; {
+    setCurrentVisitor(() =&gt; visitor);
+  };
+
+  const handleVisit = (element) =&gt; {
+    setResult(element.accept(currentVisitor));
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Visitor Pattern Example&lt;/h1&gt;
+      &lt;div&gt;
+        &lt;button onClick={() =&gt; handleVisitorChange(visitorA)}&gt;Visitor A&lt;/button&gt;
+        &lt;button onClick={() =&gt; handleVisitorChange(visitorB)}&gt;Visitor B&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;button onClick={() =&gt; handleVisit(element1)}&gt;Visit Element 1&lt;/button&gt;
+        &lt;button onClick={() =&gt; handleVisit(element2)}&gt;Visit Element 2&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;p&gt;{result}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="0b7da9e7-02ee-4a7a-b333-3955f6a050d0" class="">Pros</h2><ul id="f823ed6b-9c7a-46ff-baa9-a3f9d4e807b6" class="bulleted-list"><li style="list-style-type:disc"><strong>Separation of concerns:</strong> Allows you to add new operations to existing object structures without modifying those structures.</li></ul><ul id="d1f350c6-3ac3-4ede-a59b-58829e8c5e42" class="bulleted-list"><li style="list-style-type:disc"><strong>Open/Closed Principle:</strong> New visitors can be added easily without changing the element classes.</li></ul><ul id="26bd2791-37b9-445e-b04e-d039eabe7773" class="bulleted-list"><li style="list-style-type:disc"><strong>Accumulating state:</strong> Visitors can accumulate state as they visit elements, which is useful for operations that span multiple objects.</li></ul><ul id="6601082b-7d8c-4d14-aa5e-c643fe2cae00" class="bulleted-list"><li style="list-style-type:disc"><strong>Decoupling of algorithms:</strong> Algorithms (visitors) are separated from the objects they operate on.</li></ul><h2 id="00c8907f-7d31-4642-9ced-457e1035920c" class="">Cons</h2><ul id="4fbb69df-aa6a-46e5-90c3-fd7673c7e44b" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> Can be overkill for simple object structures and may add unnecessary complexity.</li></ul><ul id="9c910cf5-13d1-4ebc-9b66-57d522054e00" class="bulleted-list"><li style="list-style-type:disc"><strong>Breaking encapsulation:</strong> Visitors might need access to internal details of elements, potentially violating encapsulation.</li></ul><ul id="a289aec8-a7a6-49de-b6c9-bb2a406e3f2f" class="bulleted-list"><li style="list-style-type:disc"><strong>Difficult to add new elements:</strong> Adding new element types requires updating all existing visitors.</li></ul><ul id="fded182e-5e60-4dda-99cd-e4386b291149" class="bulleted-list"><li style="list-style-type:disc"><strong>Dependency issues:</strong> The visitor interface couples all visitors to all elements, which can lead to compilation dependencies.</li></ul><h1 id="185fe06f-5157-4893-9063-a8e55bc26251" class="">Thread Pool Pattern</h1><blockquote id="0506f88a-0f18-470a-877d-0d2ba59d9ab6" class="">Concurrency Patterns</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fea8a407-d451-4e21-88dc-70ed2482dd31" class="code"><code class="language-TypeScript">import React, { useState, useEffect } from &#x27;react&#x27;;
+
+const createTaskQueue = () =&gt; {
+  const tasks = [];
+  return {
+    addTask: (task) =&gt; tasks.push(task),
+    getTask: () =&gt; tasks.shift(),
+    hasTasks: () =&gt; tasks.length &gt; 0,
+  };
+};
+
+const createWorker = (id, taskQueue) =&gt; {
+  return async () =&gt; {
+    while (taskQueue.hasTasks()) {
+      const task = taskQueue.getTask();
+      if (task) {
+        console.log(`Worker ${id} processing task: ${task.name}`);
+        await task.execute();
+      }
+    }
+  };
+};
+
+const createThreadPool = (numWorkers, taskQueue) =&gt; {
+  const workers = [];
+  for (let i = 0; i &lt; numWorkers; i++) {
+    workers.push(createWorker(i, taskQueue));
+  }
+  return {
+    start: () =&gt; workers.forEach((worker) =&gt; worker()),
+  };
+};
+
+const App = () =&gt; {
+  const [taskQueue] = useState(createTaskQueue);
+  const [threadPool] = useState(createThreadPool(3, taskQueue));
+
+  useEffect(() =&gt; {
+    // Add tasks to the queue
+    for (let i = 1; i &lt;= 10; i++) {
+      taskQueue.addTask({
+        name: `Task ${i}`,
+        execute: () =&gt; new Promise((resolve) =&gt; setTimeout(resolve, 1000)),
+      });
+    }
+
+    // Start the thread pool
+    threadPool.start();
+  }, [taskQueue, threadPool]);
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Thread Pool Pattern Example&lt;/h1&gt;
+      &lt;p&gt;Check the console for task processing logs.&lt;/p&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="0f44aa0f-75fc-4abb-97e0-7ca7b7df28c2" class="">Pros</h2><ul id="78a640f2-f35f-4611-8234-5a88c49bd86b" class="bulleted-list"><li style="list-style-type:disc"><strong>Efficient resource management:</strong> Reuses a fixed number of threads to execute multiple tasks, reducing overhead of thread creation and destruction.</li></ul><ul id="53ed3b87-ea63-47b9-9a07-5c77dc312f98" class="bulleted-list"><li style="list-style-type:disc"><strong>Improved performance:</strong> Can significantly enhance application performance, especially for applications with many short-lived tasks.</li></ul><ul id="6a8ab4e9-6d8b-45ca-b4a6-2db61c494b86" class="bulleted-list"><li style="list-style-type:disc"><strong>Controlled concurrency:</strong> Limits the number of concurrent tasks, preventing resource exhaustion.</li></ul><ul id="b1511d21-13d1-4271-aecd-74e77f20d069" class="bulleted-list"><li style="list-style-type:disc"><strong>Load balancing:</strong> Automatically distributes tasks across available threads, ensuring balanced utilization.</li></ul><h2 id="bdf4d9ca-8da9-4d18-b6c5-5d8812c6d75e" class="">Cons</h2><ul id="76159e52-337b-432e-87e5-2279853c448b" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> Introduces additional complexity in managing the thread pool and task queue.</li></ul><ul id="5e721257-7a26-43c8-808f-801e550c65ba" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential for thread starvation:</strong> Long-running tasks can monopolize threads, potentially starving other tasks.</li></ul><ul id="2fc38c83-df0f-4164-868d-7d57ac8e7cbb" class="bulleted-list"><li style="list-style-type:disc"><strong>Overhead for short tasks:</strong> For very short tasks, the overhead of task submission and thread management might outweigh the benefits.</li></ul><ul id="a9f3ac35-1c3d-48dd-b06e-0c41a0396181" class="bulleted-list"><li style="list-style-type:disc"><strong>Sizing challenges:</strong> Determining the optimal thread pool size can be difficult and may require tuning based on the specific application and hardware.</li></ul><h1 id="bea60e5c-2a74-48e5-9094-53f49f3180f3" class="">Lock Pattern</h1><blockquote id="f598f53b-c238-4649-8d79-db2cd113885c" class="">Concurrency Patterns</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ee7fc643-713c-4c8c-a45e-637fa6167dd8" class="code"><code class="language-TypeScript">import React, { useState } from &#x27;react&#x27;;
+
+
+const createLock = () =&gt; {
+  let isLocked = false;
+  const waiting = [];
+
+  return {
+    lock: async () =&gt; {
+      if (isLocked) {
+        await new Promise((resolve) =&gt; waiting.push(resolve));
+      }
+      isLocked = true;
+    },
+    unlock: () =&gt; {
+      if (waiting.length &gt; 0) {
+        const resolve = waiting.shift();
+        resolve();
+      } else {
+        isLocked = false;
+      }
+    },
+  };
+};
+
+
+const createCriticalSection = (lock) =&gt; {
+  return async (task) =&gt; {
+    await lock.lock();
+    try {
+      await task();
+    } finally {
+      lock.unlock();
+    }
+  };
+};
+
+
+const App = () =&gt; {
+  const [log, setLog] = useState([]);
+  const lock = createLock();
+  const criticalSection = createCriticalSection(lock);
+
+  const handleTask = async (taskName) =&gt; {
+    await criticalSection(async () =&gt; {
+      setLog((prevLog) =&gt; [...prevLog, `${taskName} started`]);
+      await new Promise((resolve) =&gt; setTimeout(resolve, 1000)); 
+      setLog((prevLog) =&gt; [...prevLog, `${taskName} finished`]);
+    });
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Lock Pattern Example&lt;/h1&gt;
+      &lt;button onClick={() =&gt; handleTask(&#x27;Task 1&#x27;)}&gt;Start Task 1&lt;/button&gt;
+      &lt;button onClick={() =&gt; handleTask(&#x27;Task 2&#x27;)}&gt;Start Task 2&lt;/button&gt;
+      &lt;button onClick={() =&gt; handleTask(&#x27;Task 3&#x27;)}&gt;Start Task 3&lt;/button&gt;
+      &lt;div&gt;
+        &lt;h2&gt;Log:&lt;/h2&gt;
+        &lt;ul&gt;
+          {log.map((entry, index) =&gt; (
+            &lt;li key={index}&gt;{entry}&lt;/li&gt;
+          ))}
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="bae36831-858a-41c1-aa28-af236a2fdb89" class="">Pros</h2><ul id="275b7f73-8860-4f6b-a388-c8efbbd26d05" class="bulleted-list"><li style="list-style-type:disc"><strong>Mutual exclusion:</strong> Ensures that only one thread can access a shared resource at a time, preventing race conditions.</li></ul><ul id="c6694142-a03b-449b-8b18-255b3c0b1d39" class="bulleted-list"><li style="list-style-type:disc"><strong>Synchronization:</strong> Provides a way to coordinate the execution of multiple threads, ensuring proper sequencing of operations.</li></ul><ul id="5ba3fc7e-63a3-4e8d-a9cb-069290fac09b" class="bulleted-list"><li style="list-style-type:disc"><strong>Deadlock prevention:</strong> When used correctly, locks can help prevent deadlocks by enforcing a consistent order of resource acquisition.</li></ul><ul id="380845d4-00b8-40b5-a98a-efe18392a035" class="bulleted-list"><li style="list-style-type:disc"><strong>Data integrity:</strong> Protects shared data from concurrent modifications, maintaining consistency and integrity.</li></ul><h2 id="d5da2d13-2d0a-429f-ab8f-01af3a565a4a" class="">Cons</h2><ul id="74d51e3d-94a9-4d7d-9f79-3ec23db6cd74" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance overhead:</strong> Acquiring and releasing locks can introduce performance overhead, especially in high-contention scenarios.</li></ul><ul id="b40133cd-7253-47ad-bb38-606624c62700" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential for deadlocks:</strong> Improper use of locks can lead to deadlocks, where threads are stuck waiting for each other indefinitely.</li></ul><ul id="6c665fb6-cebc-4cf1-a95d-80c46feb1148" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> Can make code more complex and harder to reason about, especially when dealing with multiple locks.</li></ul><ul id="57811b3a-5dc1-454a-b714-1e0e30ff5c41" class="bulleted-list"><li style="list-style-type:disc"><strong>Scalability issues:</strong> In highly concurrent systems, lock contention can become a bottleneck, limiting scalability.</li></ul><h1 id="ef30609b-3022-494b-86f0-8063e7c5bab4" class="">Semaphore Pattern</h1><blockquote id="0e5f6ec4-de9e-4135-a79f-e0f4f710e8be" class="">Concurrency Patterns</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="dc7d9f38-4538-4a26-89b9-154f006d7c87" class="code"><code class="language-TypeScript">import React, { useState } from &#x27;react&#x27;;
+
+const createSemaphore = (maxPermits) =&gt; {
+  let permits = maxPermits;
+  const waiting = [];
+
+  return {
+    acquire: async () =&gt; {
+      if (permits &gt; 0) {
+        permits--;
+      } else {
+        await new Promise((resolve) =&gt; waiting.push(resolve));
+      }
+    },
+    release: () =&gt; {
+      if (waiting.length &gt; 0) {
+        const resolve = waiting.shift();
+        resolve();
+      } else {
+        permits++;
+      }
+    },
+  };
+};
+
+const createCriticalSection = (semaphore) =&gt; {
+  return async (task) =&gt; {
+    await semaphore.acquire();
+    try {
+      await task();
+    } finally {
+      semaphore.release();
+    }
+  };
+};
+
+
+const App = () =&gt; {
+  const [log, setLog] = useState([]);
+  const semaphore = createSemaphore(2);
+  const criticalSection = createCriticalSection(semaphore);
+
+  const handleTask = async (taskName) =&gt; {
+    await criticalSection(async () =&gt; {
+      setLog((prevLog) =&gt; [...prevLog, `${taskName} started`]);
+      await new Promise((resolve) =&gt; setTimeout(resolve, 1000)); 
+      setLog((prevLog) =&gt; [...prevLog, `${taskName} finished`]);
+    });
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Semaphore Pattern Example&lt;/h1&gt;
+      &lt;button onClick={() =&gt; handleTask(&#x27;Task 1&#x27;)}&gt;Start Task 1&lt;/button&gt;
+      &lt;button onClick={() =&gt; handleTask(&#x27;Task 2&#x27;)}&gt;Start Task 2&lt;/button&gt;
+      &lt;button onClick={() =&gt; handleTask(&#x27;Task 3&#x27;)}&gt;Start Task 3&lt;/button&gt;
+      &lt;button onClick={() =&gt; handleTask(&#x27;Task 4&#x27;)}&gt;Start Task 4&lt;/button&gt;
+      &lt;div&gt;
+        &lt;h2&gt;Log:&lt;/h2&gt;
+        &lt;ul&gt;
+          {log.map((entry, index) =&gt; (
+            &lt;li key={index}&gt;{entry}&lt;/li&gt;
+          ))}
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="00570132-cb25-4ac2-8b37-a34816e8275a" class="">Pros</h2><ul id="40a2e40e-7f02-4987-8a5b-03532a5e2bea" class="bulleted-list"><li style="list-style-type:disc"><strong>Resource control:</strong> Limits access to a fixed number of resources, preventing overuse and potential system overload.</li></ul><ul id="fe499edf-10d8-4aa7-8be2-b736c2f190c1" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility:</strong> Can be used for both mutual exclusion (when set to 1) and resource management (when set to a higher value).</li></ul><ul id="f75039f2-caae-4420-a257-18403267a461" class="bulleted-list"><li style="list-style-type:disc"><strong>Fairness:</strong> Can implement fair scheduling by maintaining a queue of waiting threads.</li></ul><ul id="0e7336d3-e7af-4848-bc13-ae03baf44c0d" class="bulleted-list"><li style="list-style-type:disc"><strong>Signaling:</strong> Useful for signaling between threads, such as producer-consumer scenarios.</li></ul><h2 id="3fd0be94-5649-404e-a147-94411fbb79f9" class="">Cons</h2><ul id="b77d1b3b-42b7-4b98-ba4b-7d4a68bb817a" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> Can be more complex to implement and use correctly compared to simple locks.</li></ul><ul id="d46ed5db-abcd-4aef-a084-cc5809123a9b" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential for deadlocks:</strong> Improper use of semaphores can lead to deadlocks, especially when multiple semaphores are involved.</li></ul><ul id="1a582762-281b-447e-85bc-388864c687d6" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance overhead:</strong> Managing the semaphore state and waiting queue can introduce some performance overhead.</li></ul><ul id="9dc222cb-462c-46fc-9662-bf74646d7b97" class="bulleted-list"><li style="list-style-type:disc"><strong>Difficult debugging:</strong> Debugging issues related to semaphores can be challenging due to the asynchronous nature of thread execution.</li></ul><h2 id="d682b036-d320-4271-aa27-604011f173cf" class="">Barrier Pattern</h2><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9965773d-57ac-4bda-a214-58fe0545ef8a" class="code"><code class="language-TypeScript">import React, { useState } from &#x27;react&#x27;;
+
+const createBarrier = (numTasks) =&gt; {
+  let count = 0;
+  const waiting = [];
+
+  return {
+    await: async () =&gt; {
+      count++;
+      if (count &lt; numTasks) {
+        await new Promise((resolve) =&gt; waiting.push(resolve));
+      } else {
+        while (waiting.length &gt; 0) {
+          const resolve = waiting.shift();
+          resolve();
+        }
+        count = 0;
+      }
+    },
+  };
+};
+
+const createTask = (barrier, taskName, log, setLog) =&gt; {
+  return async () =&gt; {
+    setLog((prevLog) =&gt; [...prevLog, `${taskName} started`]);
+    await new Promise((resolve) =&gt; setTimeout(resolve, Math.random() * 2000));
+    setLog((prevLog) =&gt; [...prevLog, `${taskName} reached the barrier`]);
+    await barrier.await();
+    setLog((prevLog) =&gt; [...prevLog, `${taskName} passed the barrier`]);
+  };
+};
+
+const App = () =&gt; {
+  const [log, setLog] = useState([]);
+  const barrier = createBarrier(3);
+
+  const handleStartTasks = () =&gt; {
+    const task1 = createTask(barrier, &#x27;Task 1&#x27;, log, setLog);
+    const task2 = createTask(barrier, &#x27;Task 2&#x27;, log, setLog);
+    const task3 = createTask(barrier, &#x27;Task 3&#x27;, log, setLog);
+
+    task1();
+    task2();
+    task3();
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Barrier Pattern Example&lt;/h1&gt;
+      &lt;button onClick={handleStartTasks}&gt;Start Tasks&lt;/button&gt;
+      &lt;div&gt;
+        &lt;h2&gt;Log:&lt;/h2&gt;
+        &lt;ul&gt;
+          {log.map((entry, index) =&gt; (
+            &lt;li key={index}&gt;{entry}&lt;/li&gt;
+          ))}
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="92b3779e-8e5b-423e-b7bf-daed6f46fe1a" class="">Pros</h2><ul id="98c032da-86d2-4ca0-842a-251c6fb5420f" class="bulleted-list"><li style="list-style-type:disc"><strong>Synchronization:</strong> Ensures that a group of related tasks are processed up to a certain point together.</li></ul><ul id="8d09e8f4-0ffd-4d74-a93e-9fbab12bcc4b" class="bulleted-list"><li style="list-style-type:disc"><strong>Coordination:</strong> Useful for dividing a problem into synchronized steps among multiple threads.</li></ul><ul id="4ee7de56-9efb-458d-a135-fca150fd510e" class="bulleted-list"><li style="list-style-type:disc"><strong>Load balancing:</strong> Can help in achieving better load distribution in parallel processing scenarios.</li></ul><ul id="068fc37d-a47c-42a0-9ac0-126809aebcbd" class="bulleted-list"><li style="list-style-type:disc"><strong>Phased execution:</strong> Enables the implementation of algorithms that work in phases, where each phase depends on the completion of the previous one.</li></ul><h2 id="322eb8ff-8cdc-4a82-8f16-17a72f8184f4" class="">Cons</h2><ul id="6926d7cb-1e3c-4d0d-86d6-627d66c22b2c" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential for deadlocks:</strong> If not all threads reach the barrier, it can lead to a deadlock situation.</li></ul><ul id="22423042-c3ec-465c-911b-1b6d0286dde0" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance impact:</strong> Threads may need to wait at the barrier, potentially impacting overall performance.</li></ul><ul id="3cc88de2-73f3-4c60-a76b-0b13ab6f7410" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity:</strong> Adds complexity to the code and can make it harder to reason about the program&#x27;s flow.</li></ul><ul id="30c23f22-c070-465b-a57d-8ff90505c426" class="bulleted-list"><li style="list-style-type:disc"><strong>Inflexibility:</strong> The number of threads must be known in advance, which may not be suitable for all scenarios.</li></ul><h2 id="44fb4805-81f8-456b-a122-223380dac68c" class="">Monitor Pattern</h2><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f4d286c-61b0-462d-9b28-6e57986407d7" class="code"><code class="language-TypeScript">import React, { useState } from &#x27;react&#x27;;
+
+const createMonitor = () =&gt; {
+  let isLocked = false;
+  const waiting = [];
+
+  return {
+    enter: async () =&gt; {
+      if (isLocked) {
+        await new Promise((resolve) =&gt; waiting.push(resolve));
+      }
+      isLocked = true;
+    },
+    exit: () =&gt; {
+      if (waiting.length &gt; 0) {
+        const resolve = waiting.shift();
+        resolve();
+      } else {
+        isLocked = false;
+      }
+    },
+  };
+};
+
+const createCriticalSection = (monitor) =&gt; {
+  return async (task) =&gt; {
+    await monitor.enter();
+    try {
+      await task();
+    } finally {
+      monitor.exit();
+    }
+  };
+};
+
+const App = () =&gt; {
+  const [log, setLog] = useState([]);
+  const monitor = createMonitor();
+  const criticalSection = createCriticalSection(monitor);
+
+  const handleTask = async (taskName) =&gt; {
+    await criticalSection(async () =&gt; {
+      setLog((prevLog) =&gt; [...prevLog, `${taskName} started`]);
+      await new Promise((resolve) =&gt; setTimeout(resolve, 1000));
+      setLog((prevLog) =&gt; [...prevLog, `${taskName} finished`]);
+    });
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Monitor Pattern Example&lt;/h1&gt;
+      &lt;button onClick={() =&gt; handleTask(&#x27;Task 1&#x27;)}&gt;Start Task 1&lt;/button&gt;
+      &lt;button onClick={() =&gt; handleTask(&#x27;Task 2&#x27;)}&gt;Start Task 2&lt;/button&gt;
+      &lt;button onClick={() =&gt; handleTask(&#x27;Task 3&#x27;)}&gt;Start Task 3&lt;/button&gt;
+      &lt;div&gt;
+        &lt;h2&gt;Log:&lt;/h2&gt;
+        &lt;ul&gt;
+          {log.map((entry, index) =&gt; (
+            &lt;li key={index}&gt;{entry}&lt;/li&gt;
+          ))}
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2 id="7c862dfb-c72d-4251-b18e-01be996a1887" class="">Pros</h2><ul id="daae3c4b-274c-4e37-b96f-caacad29efa0" class="bulleted-list"><li style="list-style-type:disc"><strong>Encapsulation:</strong> Combines data and the methods that operate on it into a single unit, improving modularity.</li></ul><ul id="89b03048-dfd2-479b-9545-ea74e4b3d54a" class="bulleted-list"><li style="list-style-type:disc"><strong>Mutual exclusion:</strong> Ensures that only one thread can access the shared data at a time, preventing race conditions.</li></ul><ul id="f19e605b-782e-47f8-9a3f-1544b5b134d4" class="bulleted-list"><li style="list-style-type:disc"><strong>Condition synchronization:</strong> Provides a mechanism for threads to wait for specific conditions to be met.</li></ul><ul id="c5344b1f-ef18-4575-8722-f49ea61bce0b" class="bulleted-list"><li style="list-style-type:disc"><strong>Simplifies concurrent programming:</strong> Abstracts away low-level synchronization details, making it easier to write correct concurrent code.</li></ul><h2 id="40be8386-cf55-466a-8e51-791eced5c5ec" class="">Cons</h2><ul id="469eb979-0d50-4b45-af3a-fc988bbdc4fc" class="bulleted-list"><li style="list-style-type:disc"><strong>Potential for deadlocks:</strong> Improper use of monitors can lead to deadlocks, especially when multiple monitors are involved.</li></ul><ul id="a00a6b3b-51b0-4a0f-83f9-596b40a0d5bd" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance overhead:</strong> The locking mechanism introduces some overhead, which can impact performance in high-contention scenarios.</li></ul><ul id="5fb8ca8f-e541-4b5b-ae89-4d28c071dad6" class="bulleted-list"><li style="list-style-type:disc"><strong>Limited concurrency:</strong> Only one thread can execute within the monitor at a time, which may limit parallelism.</li></ul><ul id="cd76fd23-b3fc-48bf-ac67-8f2137b34a53" class="bulleted-list"><li style="list-style-type:disc"><strong>Complexity in nested monitor calls:</strong> Handling nested monitor calls correctly can be challenging and may lead to subtle</li></ul><p id="03a1e84a-4e50-4d52-a0b5-a729b5afa703" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
